@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class UserAccess extends Model
+{
+    protected $fillable = ['user_id', 'query_id'];
+
+    public static function registerAccess($userId, $queryId)
+    {
+        return self::create([
+            'user_id' => $userId,
+            'query_id' => $queryId,
+        ]);
+    }
+
+    public function queries()
+    {
+        return $this->belongsTo(Query::class, 'query_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+}
