@@ -72,7 +72,6 @@
         <flux:menu>
             <flux:menu.radio.group>
                 <flux:menu.radio checked>{{ ucwords(mb_strtolower(Str::words(auth()->user()->name ?? 'Administrador',2,''))) }}</flux:menu.radio>
-                <flux:menu.radio>Truly Delta</flux:menu.radio>
             </flux:menu.radio.group>
 
             <flux:menu.separator/>

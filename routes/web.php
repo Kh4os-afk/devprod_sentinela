@@ -3,16 +3,16 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/',\App\Livewire\Index::class);
 
-Route::get('/login',function (){
-   Auth::login(\App\Models\User::first());
+Route::middleware(['guest'])->group(function () {
+    Route::get('/login', \App\Livewire\Auth\Login::class)->name('login');
 });
 
 Route::middleware('auth')->group(function () {
-    /*Route::get('/logout', [\App\Livewire\Auth\Login::class, 'logout'])->name('logout');*/
 
-    /*Route::get('/', \App\Livewire\Index::class)->name('index');*/
+    Route::get('/logout', [\App\Livewire\Auth\Login::class, 'logout'])->name('logout');
+
+    Route::get('/',\App\Livewire\Index::class);
     Route::get('/sentinela/{modulo}', \App\Livewire\Consulta\MostrarConsulta::class)->name('estoque.index');
     Route::get('/relatorio/{tabela}', \App\Livewire\Relatorio::class)->lazy()->name('relatorio');
 
