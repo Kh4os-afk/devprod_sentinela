@@ -39,7 +39,7 @@
                                     <flux:icon.exclamation-triangle variant="solid" class="text-yellow-500"/>
                                 @elseif($consulta->values and count(json_decode($consulta->values->valor)) > 100)
                                     {{--<i style="color: #f27474" class="app-menu__icon fa fa-times fa-2x"></i>--}}
-                                    <flux:icon.x-circle variant="solid" class="text-red-500-500"/>
+                                    <flux:icon.x-circle variant="solid" class="text-red-500"/>
                                 @else
                                     {{--<i style="color: #a5dc86" class="app-menu__icon fa fa-check fa-2x"></i>--}}
                                     <flux:icon.check-circle variant="solid" class="text-green-500"/>
