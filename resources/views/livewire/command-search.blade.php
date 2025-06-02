@@ -3,7 +3,7 @@
         <flux:input as="button" variant="filled" placeholder="Pesquisar..." icon="magnifying-glass" kbd="Alt + K"/>
     </flux:modal.trigger>
 
-    <flux:modal name="search" variant="bare" class="w-full max-w-[30rem] my-[12vh] max-h-screen overflow-y-hidden">
+    <flux:modal name="search" variant="bare" class="w-full max-w-8/12 my-[12vh] max-h-screen overflow-y-hidden">
         <flux:command class="border-none shadow-lg inline-flex flex-col max-h-[76vh]">
             <flux:command.input placeholder="Pesquisar..." closable/>
             <flux:command.items>
