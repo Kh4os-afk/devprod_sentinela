@@ -71,7 +71,7 @@
                             <flux:table.cell class="py-0! text-center">
                                 <div>
                                     <flux:button square variant="ghost" icon="document-text" wire:click="relatorio({{ $consulta->id }})"></flux:button>
-                                    <flux:button square variant="ghost" icon="arrow-path" wire:click="atualizar({{ $consulta->id }})"></flux:button>
+                                    <flux:button square variant="ghost" :icon="$consulta->runningJob ? 'loading' : 'arrow-path'" wire:click="atualizar({{ $consulta->id }})"></flux:button>
                                     @if(auth()->user()->is_admin)
                                         <flux:button square variant="ghost" icon="pencil" wire:click="editarConsulta({{ $consulta->id }})"></flux:button>
                                         <flux:button square variant="ghost" icon="trash" wire:click="deletarConsulta({{$consulta->id}})"></flux:button>
