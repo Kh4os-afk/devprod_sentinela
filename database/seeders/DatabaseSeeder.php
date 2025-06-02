@@ -89,7 +89,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\Module::create([
             'id' => '10',
             'modulo' => 'Verbas',
-            'icon' => 'fa fa-industry',
+            'icon' => 'bars-arrow-down',
             'extra' => false,
 
         ]);
