@@ -12,7 +12,7 @@
                 @if($submoduloId === 'null')
                     Sem Submódulo
                 @else
-                    {{ $submodulos->get($submoduloId)?->submodulo ?? 'Submódulo não encontrado' }}
+                    {{ $submodulos->get($submoduloId)?->submodulo ?? 'Sem Submódulo' }}
                 @endif
             </flux:heading>
         </div>
@@ -137,11 +137,10 @@
                 </div>
                 <div class="col-span-6">
                     <flux:select wire:model="submodulo" label="Sub Modulo">
-                        @forelse(\App\Models\SubModulo::where('modulo_id', $modulo_id)->get() as $submodulo)
-                            <flux:select.option value="{{ $submodulo->id }}">{{ $submodulo->id }} - {{ $submodulo->submodulo }}</flux:select.option>
-                        @empty
-                            <flux:select.option value="">Nenhum Valor Disponivel</flux:select.option>
-                        @endforelse
+                        <flux:select.option value=0>Sem Modulo</flux:select.option>
+                        @foreach(\App\Models\SubModulo::where('modulo_id', $modulo_id)->get() as $submodulo)
+                            <flux:select.option value="{{ $submodulo->id }}">{{ $submodulo->submodulo }}</flux:select.option>
+                        @endforeach
                     </flux:select>
                 </div>
                 <div class="col-span-12">
