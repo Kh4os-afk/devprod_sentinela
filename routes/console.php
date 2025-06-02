@@ -18,7 +18,7 @@ Schedule::call(function () {
     try {
         $querys = Query::all();
         foreach ($querys as $query) {
-            if (now()->diffInHours($query->values ? $query->values->updated_at : $query->updated_at) <= $query->atualizacao) {
+            if (now()->diffInHours($query->values ? $query->values->updated_at : $query->updated_at) >= $query->atualizacao) {
                 AtualizacaoJob::dispatch($query);
                 $query->values ? $query->values->touch() : $query->touch();
             }
