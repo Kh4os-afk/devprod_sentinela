@@ -21,9 +21,9 @@ Schedule::call(function () {
             if (now()->diffInHours($query->values ? $query->values->updated_at : $query->updated_at) >= $query->atualizacao) {
                 AtualizacaoJob::dispatch($query);
                 $query->values ? $query->values->touch() : $query->touch();
-                Log::info('Atualização Despachada na fila as ' . now()->format('d/m/Y H:i:s') . ' do Job ' . $query->titulo);
             }
         }
+        Log::info('Atualizador executado com sucesso às ' . now()->format('d/m/Y H:i:s'));
     } catch (\Exception $e) {
         Log::error('Erro durante a execução do atualizador: ' . $e->getMessage());
     }
