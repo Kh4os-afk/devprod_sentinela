@@ -17,8 +17,7 @@
     <flux:brand href="/" logo="{{ asset('imagens/logo_preta.png') }}" name="{{ config('app.name','Devprod Sentinela') }}" class="px-2 dark:hidden"/>
     <flux:brand href="/" logo="{{ asset('imagens/logo_branco.png') }}" name="{{ config('app.name','Devprod Sentinela') }}" class="px-2 hidden dark:flex"/>
 
-
-    <flux:input as="button" variant="filled" placeholder="Pesquisar..." icon="magnifying-glass"/>
+    <livewire:command-search/>
 
     <flux:navlist variant="outline">
         <flux:navlist.item icon="home" href="/">Dashboard</flux:navlist.item>
