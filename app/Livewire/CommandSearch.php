@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Query;
 use Livewire\Component;
+use Livewire\Attributes\Computed;
 
 class CommandSearch extends Component
 {
@@ -14,6 +15,15 @@ class CommandSearch extends Component
         } else {
             $this->atualizar($query);
         }
+    }
+
+    #[Computed]
+    public function queries()
+    {
+        return Query::join('values', 'values.query_id', '=', 'queries.id')
+            ->select('queries.*')
+            ->orderBy('queries.titulo','asc')
+            ->get();
     }
     public function render()
     {
