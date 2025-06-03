@@ -16,16 +16,23 @@ Artisan::command('inspire', function () {
 
 Schedule::call(function () {
     try {
+        $now = now()->format('H:i');
         $querys = Query::all();
+
         foreach ($querys as $query) {
-            if (now()->diffInHours($query->values ? $query->values->updated_at : $query->updated_at) >= $query->atualizacao) {
+            $horarios = is_array($query->horarios_execucao)
+                ? $query->horarios_execucao
+                : json_decode($query->horarios_execucao, true);
+
+            if (in_array($now, $horarios ?? [])) {
                 AtualizacaoJob::dispatch($query);
-                $query->values ? $query->values->touch() : $query->touch();
+                Log::info("Consulta ID {$query->id} atualizada no horário {$now}");
             }
         }
-        Log::info('Atualizador executado com sucesso às ' . now()->format('d/m/Y H:i:s'));
+
+        Log::info('Verificação de horários executada com sucesso às ' . now()->format('d/m/Y H:i:s'));
     } catch (\Exception $e) {
-        Log::error('Erro durante a execução do atualizador: ' . $e->getMessage());
+        Log::error('Erro durante a execução da verificação de horários: ' . $e->getMessage());
     }
 })->everyMinute();
 

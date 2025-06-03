@@ -26,6 +26,7 @@ class MostrarConsulta extends Component
     public $consulta_modal;
     public $submodulo;
     public $modulo_id;
+    public $horario_execucao;
 
     public function deletarConsulta(Query $id)
     {
@@ -58,6 +59,7 @@ class MostrarConsulta extends Component
         $this->atualizacao_modal = $id->atualizacao;
         $this->consulta_modal = $id->consulta;
         $this->submodulo = $id->submodulo_id;
+        $this->horario_execucao = json_decode($id->horarios_execucao);
 
         Flux::modal('editar-consulta')->show();
     }
@@ -71,6 +73,7 @@ class MostrarConsulta extends Component
             'atualizacao' => $this->atualizacao_modal,
             'consulta' => $this->consulta_modal,
             'submodulo_id' => $this->submodulo,
+            'horarios_execucao' => $this->horario_execucao,
         ]);
 
         Flux::toast(
