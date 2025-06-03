@@ -135,7 +135,7 @@
                 <div class="col-span-6">
                     {{--<flux:input wire:model="atualizacao_modal" label="Tempo de Atualização em Horas"/>--}}
 
-                    <flux:select variant="listbox" indicator="checkbox" multiple label="Tempo de Atualização" wire:model="horario_execucao">
+                    <flux:select variant="listbox" searchable indicator="checkbox" multiple label="Tempo de Atualização" wire:model="horario_execucao">
                         @forelse(\App\Models\Horario::all() as $horario)
                             <flux:select.option>
                                 <div class="flex items-center gap-2">
@@ -144,6 +144,12 @@
                                 </div>
                             </flux:select.option>
                         @empty
+                            <flux:select.option value="00:00">
+                                <div class="flex items-center gap-2">
+                                    <flux:icon.x-circle variant="mini" class="text-zinc-400"/>
+                                    Sem Horários Disponíveis
+                                </div>
+                            </flux:select.option>
                         @endforelse
                     </flux:select>
                 </div>
