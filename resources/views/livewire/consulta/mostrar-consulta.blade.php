@@ -25,7 +25,7 @@
                     <flux:table.column class="text-center" align="center">Situação</flux:table.column>
                     <flux:table.column class="text-center">Ocorrência</flux:table.column>
                     <flux:table.column class="text-center">Data Atualização</flux:table.column>
-                    <flux:table.column class="text-center">Próxima Atualização</flux:table.column>
+                    <flux:table.column class="text-center">Histórico</flux:table.column>
                     <flux:table.column class="text-center">Operações</flux:table.column>
                 </flux:table.columns>
 
@@ -51,22 +51,12 @@
                             <flux:table.cell class="py-0! text-center">
                                 {{ $consulta->values ? $consulta->values->updated_at->format('d/m/Y H:i:s') : '' }}
                             </flux:table.cell>
-                            @php
-                                $lastUpdate = $consulta->values ? $consulta->values->updated_at : null;
-                                $nextUpdate = $consulta->values ? $consulta->values->updated_at->copy()->addHours($consulta->atualizacao) : null;
-                                $progressPercentage = 0;
-
-                                if ($lastUpdate && $nextUpdate) {
-                                    $totalDuration = $lastUpdate->diffInSeconds($nextUpdate);
-                                    $elapsedDuration = $lastUpdate->diffInSeconds(Carbon\Carbon::now());
-                                    $progressPercentage = ($elapsedDuration / $totalDuration) * 100;
-                                    $progressPercentage = min(max($progressPercentage, 0), 100);
-                                }
-                            @endphp
                             <flux:table.cell class="py-0! align-middle">
-                                <div class="progress progress-bar-striped progress-bar-animated" role="progressbar" aria-label="Animated striped example" aria-valuenow="{{ $progressPercentage }}" aria-valuemin="0" aria-valuemax="100" style="height: 10px; background-color: #0d6efd">
-                                    <div class="progress-bar" style="width: {{ $progressPercentage }}%;background-color: #e9ecef"></div>
-                                </div>
+                                <flux:chart :value="[15, 18, 16, 19, 22, 25, 28, 25, 29, 28, 32, 35,30,17,15,10,5,2,1]" class="w-[7rem] aspect-[4/1]">
+                                    <flux:chart.svg gutter="0">
+                                        <flux:chart.line class="text-green-500 dark:text-green-400"/>
+                                    </flux:chart.svg>
+                                </flux:chart>
                             </flux:table.cell>
                             <flux:table.cell class="py-0! text-center">
                                 <div>
@@ -142,18 +132,38 @@
                     </flux:select>
                 </div>
                 <div class="col-span-6">
-                    <flux:select wire:model="submodulo" label="Sub Modulo">
-                        <flux:select.option value=0>Sem Modulo</flux:select.option>
-                        @foreach(\App\Models\SubModulo::where('modulo_id', $modulo_id)->get() as $submodulo)
-                            <flux:select.option value="{{ $submodulo->id }}">{{ $submodulo->submodulo }}</flux:select.option>
-                        @endforeach
-                    </flux:select>
+                    <flux:field>
+                        <flux:label>Sub Modulo</flux:label>
+
+                        <flux:button.group>
+                            <flux:select wire:model="submodulo">
+                                <flux:select.option value=0>Sem Modulo</flux:select.option>
+                                @foreach($this->submodulos as $submodulo)
+                                    <flux:select.option value="{{ $submodulo->id }}">{{ $submodulo->submodulo }}</flux:select.option>
+                                @endforeach
+                            </flux:select>
+
+                            <flux:modal.trigger name="criar_submodulo">
+                                <flux:button icon="plus" {{--href="{{ route('criar.submodulo',['modulo' => $modulo_modal]) }}" target="_blank"--}}/>
+                            </flux:modal.trigger>
+                        </flux:button.group>
+
+                        <flux:modal name="criar_submodulo" variant="flyout">
+                            <livewire:criar-sub-modulo :modulo="$modulo_modal"/>
+                        </flux:modal>
+
+                        <flux:error name="submodulo"/>
+                    </flux:field>
                 </div>
                 <div class="col-span-12">
-                    <flux:textarea label="Consulta" placeholder="Consulta" wire:model="consulta_modal"/>
+                    <flux:textarea label="Consulta" placeholder="Consulta" rows="auto" wire:model="consulta_modal"/>
                 </div>
                 <div class="col-span-12">
-                    <i class="fa fa-exclamation-triangle" aria-hidden="true"> Editar uma consulta faz com que seus dados sejam atualizados</i>
+                    <flux:callout color="emerald">
+                        <flux:callout.heading icon="exclamation-triangle">Atenção</flux:callout.heading>
+
+                        <flux:callout.text>Ao editar uma consulta, seus dados são atualizados.</flux:callout.text>
+                    </flux:callout>
                 </div>
             </div>
             <div class="flex gap-2">

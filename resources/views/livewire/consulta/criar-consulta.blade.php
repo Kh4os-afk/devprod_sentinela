@@ -5,10 +5,18 @@
         <flux:subheading size="lg">Criar Consulta</flux:subheading>
     </div>
     <flux:separator variant="subtle"/>
+    <div>
+        <flux:callout color="emerald">
+            <flux:callout.heading icon="exclamation-triangle">Atenção</flux:callout.heading>
+
+            <flux:callout.text>Os campos do select devem ser especificados.</flux:callout.text>
+        </flux:callout>
+    </div>
     <flux:card>
         <form wire:submit="submit" class="grid grid-cols-12 gap-4">
             <div class="col-span-12">
                 <flux:select wire:model="modulo" label="Modulo">
+                        <flux:select.option selected value="null">Selecione o Modulo</flux:select.option>
                     @forelse(\App\Models\Module::all() as $module)
                         <flux:select.option value="{{ $module->id }}">{{ $module->modulo }}</flux:select.option>
                     @empty
@@ -21,28 +29,9 @@
                 <flux:input label="Titulo" wire:model="titulo"/>
             </div>
 
-            <div class="col-span-6">
-                <flux:input label="Tabela" wire:model.live="tabela" @focus="atualizarSugestoes"/>
-            </div>
-
-            <div class="col-span-6">
-                <flux:select wire:model="tabela" label="Tabelas Existentes">
-                    @foreach($sugestoes as $sugestao)
-                        <option value="{{ $sugestao }}">{{ $sugestao }}</option>
-                    @endforeach
-                </flux:select>
-            </div>
 
             <div class="col-span-12">
-                <flux:input label="Tempo de Atualização em Horas" wire:model.live="atualizacao"/>
-            </div>
-
-            <div class="col-span-12">
-                <flux:textarea label="Consulta" placeholder="select matricula,nome,cpf,rg from dual;" wire:model="consulta"/>
-            </div>
-
-            <div class="col-span-12 text-danger">
-                <i class="fa fa-exclamation-triangle" aria-hidden="true"> Atenção os campos do select devem ser especificados</i>
+                <flux:textarea label="Consulta" rows="auto" placeholder="select matricula,nome,cpf,rg from dual;" wire:model="consulta"/>
             </div>
 
             <div class="col-span-12">

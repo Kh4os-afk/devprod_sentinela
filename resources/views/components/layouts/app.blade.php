@@ -30,7 +30,7 @@
         @endforelse
 
         <flux:navlist.item icon="chevron-down" wire:navigate.hover href="{{ route('criar.consulta') }}">Criar Consulta</flux:navlist.item>
-        <flux:navlist.item icon="chevron-double-down" wire:navigate.hover href="{{ route('criar.submodulo') }}">Cadastrar Sub Modulo</flux:navlist.item>
+        {{--<flux:navlist.item icon="chevron-double-down" wire:navigate.hover href="{{ route('criar.submodulo') }}">Cadastrar Sub Modulo</flux:navlist.item>--}}
 
 
         {{--<flux:navlist.group expandable heading="Favorites" class="hidden lg:grid">

@@ -19,7 +19,6 @@ Route::middleware('auth')->group(function () {
     /*Route::get('/usuario', \App\Livewire\EditarUsuario::class)->name('editar.usuario');*/
     /*admin*/
     Route::get('/criar', \App\Livewire\Consulta\CriarConsulta::class)->name('criar.consulta');
-    Route::get('/submodulo/criar', \App\Livewire\CriarSubModulo::class)->name('criar.submodulo');
 });
 
 Route::get('/teste',\App\Livewire\Teste::class);

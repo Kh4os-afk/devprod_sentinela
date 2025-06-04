@@ -32,7 +32,7 @@
                         <flux:link href="#" variant="subtle" class="text-sm">Esqueceu a senha?</flux:link>
                     </div>
 
-                    <flux:input type="password" placeholder="Sua senha" wire:model="password"/>
+                    <flux:input type="password" placeholder="Sua senha" wire:model="password" viewable/>
                 </flux:field>
 
                 <flux:button variant="primary" class="w-full" type="submit">Entrar</flux:button>

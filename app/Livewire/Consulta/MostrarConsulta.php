@@ -11,6 +11,7 @@ use Flux\Flux;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\Attributes\Computed;
 
 class MostrarConsulta extends Component
 {
@@ -124,6 +125,13 @@ class MostrarConsulta extends Component
             text: 'Atualização da consulta foi enfileirada e em breve estara disponivel.',
             variant: 'success',
         );
+    }
+
+    #[On('submodulo-criado')]
+    #[Computed]
+    public function submodulos()
+    {
+        return SubModulo::where('modulo_id', $this->modulo_id)->get();
     }
 
     public function render()
