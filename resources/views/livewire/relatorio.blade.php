@@ -15,7 +15,7 @@
         @forelse ($relatorios as $objeto)
             <tr>
                 @forelse ($objeto as $valor)
-                    <td class="text-truncate">{{ $valor }}</td>
+                    <td class="truncate">{{ $valor }}</td>
                 @empty
                 @endforelse
             </tr>
