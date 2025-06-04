@@ -123,18 +123,6 @@
                     <flux:input wire:model="titulo_modal" label="Titulo"/>
                 </div>
                 <div class="col-span-6">
-                    <flux:input wire:model.live="tabela_modal" label="Tabela"/>
-                </div>
-                <div class="col-span-6">
-                    <flux:select label="Tabelas Existentes">
-                        {{--@foreach($sugestoes as $sugestao)
-                            <flux:select.option value="{{ $sugestao }}">{{ $sugestao }}</flux:select.option>
-                        @endforeach--}}
-                    </flux:select>
-                </div>
-                <div class="col-span-6">
-                    {{--<flux:input wire:model="atualizacao_modal" label="Tempo de Atualização em Horas"/>--}}
-
                     <flux:select variant="listbox" searchable indicator="checkbox" multiple label="Tempo de Atualização" wire:model="horario_execucao">
                         @forelse(\App\Models\Horario::all() as $horario)
                             <flux:select.option>

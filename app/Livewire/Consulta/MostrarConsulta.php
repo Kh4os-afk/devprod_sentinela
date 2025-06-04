@@ -21,7 +21,6 @@ class MostrarConsulta extends Component
     public $consultasAgrupadas; // Changed from $consultas to $consultasAgrupadas
     public $modulo_modal;
     public $titulo_modal;
-    public $tabela_modal;
     public $atualizacao_modal;
     public $consulta_modal;
     public $submodulo;
@@ -55,7 +54,6 @@ class MostrarConsulta extends Component
         $this->idParaEditar = $id;
         $this->modulo_modal = $id->modulo;
         $this->titulo_modal = $id->titulo;
-        $this->tabela_modal = $id->tabela;
         $this->atualizacao_modal = $id->atualizacao;
         $this->consulta_modal = $id->consulta;
         $this->submodulo = $id->submodulo_id;
@@ -69,7 +67,6 @@ class MostrarConsulta extends Component
         $this->idParaEditar->update([
             'modulo' => $this->modulo_modal,
             'titulo' => $this->titulo_modal,
-            'tabela' => $this->tabela_modal,
             'atualizacao' => $this->atualizacao_modal,
             'consulta' => $this->consulta_modal,
             'submodulo_id' => $this->submodulo,
