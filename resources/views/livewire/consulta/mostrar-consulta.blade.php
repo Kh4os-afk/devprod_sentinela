@@ -31,7 +31,7 @@
 
                 <flux:table.rows>
                     @foreach($consultas as $consulta)
-                        <flux:table.row>
+                        <flux:table.row :key="$consulta->id">
                             <flux:table.cell align="start" class="py-0! truncate max-w-60">{{ $consulta->titulo }}</flux:table.cell>
                             <flux:table.cell align="end" class="py-0!">
                                 @if($consulta->values and count(json_decode($consulta->values->valor)) > 0 and count(json_decode($consulta->values->valor)) <= 100)
