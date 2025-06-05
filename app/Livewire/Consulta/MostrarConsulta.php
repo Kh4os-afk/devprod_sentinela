@@ -27,6 +27,8 @@ class MostrarConsulta extends Component
     public $submodulo;
     public $modulo_id;
     public $horario_execucao;
+    public $tituloIA;
+    public $respostaIA;
 
     public function deletarConsulta(Query $id)
     {
@@ -132,6 +134,71 @@ class MostrarConsulta extends Component
     public function submodulos()
     {
         return SubModulo::where('modulo_id', $this->modulo_id)->get();
+    }
+
+    public function iaResposta($id)
+    {
+        // 1. Recupera os dados
+        $dados = Query::where('queries.id', $id)
+            ->join('values', 'queries.id', '=', 'values.query_id')
+            ->select('queries.titulo', 'values.valor')
+            ->first();
+
+        if (!$dados) {
+            Flux::toast(
+                heading: 'Atenção',
+                text: 'Dados da consulta não encontrados.',
+                variant: 'warning',
+            );
+
+            return;
+        }
+
+        $titulo = $dados->titulo;
+        $valores = json_decode($dados->valor, true);
+
+        // 2. Monta o prompt para a IA
+        $prompt = "Você é um analista de dados do ERP Winthor. Abaixo estão os resultados da consulta \"$titulo\". Analise e forneça um resumo e insights úteis:\n\n";
+
+        foreach ($valores as $linha) {
+            $prompt .= "- " . implode(' | ', $linha) . "\n";
+        }
+
+        // 3. Configura a requisição cURL para a OpenAI
+        $apiKey = config('app.openai_api_key'); // defina isso no seu .env
+
+        $postData = [
+            'model' => 'gpt-4',
+            'messages' => [
+                ['role' => 'system', 'content' => 'Você é um analista de dados experiente.'],
+                ['role' => 'user', 'content' => $prompt],
+            ],
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt_array($ch, [
+            CURLOPT_URL => 'https://api.openai.com/v1/chat/completions',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_HTTPHEADER => [
+                'Authorization: Bearer ' . $apiKey,
+                'Content-Type: application/json',
+            ],
+            CURLOPT_POSTFIELDS => json_encode($postData),
+        ]);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        $decoded = json_decode($response, true);
+        $respostaIA = $decoded['choices'][0]['message']['content'] ?? 'Não foi possível gerar uma resposta.';
+
+        Flux::modal('ia-resposta')->show();
+
+        // 4. Exibe no modal ou retorna para Livewire/Blade
+        $this->tituloIA = $titulo;
+        $this->respostaIA = $respostaIA;
     }
 
     public function render()

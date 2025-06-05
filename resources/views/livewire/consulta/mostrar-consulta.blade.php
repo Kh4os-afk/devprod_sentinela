@@ -62,6 +62,7 @@
                             <flux:table.cell align="end" class="py-0!">
                                 <div>
                                     <flux:button square variant="ghost" icon="document-text" wire:click="relatorio({{ $consulta->id }})"></flux:button>
+                                    <flux:button square variant="ghost" icon="bot" wire:click="iaResposta({{ $consulta->id }})"></flux:button>
                                     <flux:button square variant="ghost" :icon="$consulta->runningJob ? 'loading' : 'arrow-path'" wire:click="atualizar({{ $consulta->id }})"></flux:button>
                                     @if(auth()->user()->is_admin)
                                         <flux:button square variant="ghost" icon="pencil" wire:click="editarConsulta({{ $consulta->id }})"></flux:button>
@@ -76,6 +77,24 @@
         </flux:card>
     @empty
     @endforelse
+
+    <flux:modal name="ia-resposta" class="max-w-6/12">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Devprod IA</flux:heading>
+                <flux:text class="mt-2">{{ $tituloIA ?? '' }}</flux:text>
+            </div>
+            <div>
+                <flux:text class="text-base">
+                    {{ $respostaIA ?? 'Aguardando resposta...' }}
+                </flux:text>
+            </div>
+            <div class="flex">
+                <flux:spacer />
+                <flux:button type="button" variant="ghost" x-on:click="$flux.modal('ia-resposta').close()">Fechar</flux:button>
+            </div>
+        </div>
+    </flux:modal>
 
     <!-- Modals remain the same -->
     <flux:modal name="deletar-consulta" class="min-w-[22rem]">
