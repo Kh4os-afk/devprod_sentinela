@@ -21,7 +21,7 @@
             <!-- Table for this submodule -->
             <flux:table class="table table-hover">
                 <flux:table.columns>
-                    <flux:table.column align="start" class="min-w-52">Regra</flux:table.column>
+                    <flux:table.column align="start" class="min-w-60">Regra</flux:table.column>
                     <flux:table.column align="end">Situação</flux:table.column>
                     <flux:table.column align="end">Ocorrência</flux:table.column>
                     <flux:table.column align="end">Data Atualização</flux:table.column>
@@ -32,7 +32,7 @@
                 <flux:table.rows>
                     @foreach($consultas as $consulta)
                         <flux:table.row>
-                            <flux:table.cell align="start" class="py-0! truncate max-w-52">{{ $consulta->titulo }}</flux:table.cell>
+                            <flux:table.cell align="start" class="py-0! truncate max-w-60">{{ $consulta->titulo }}</flux:table.cell>
                             <flux:table.cell align="end" class="py-0!">
                                 @if($consulta->values and count(json_decode($consulta->values->valor)) > 0 and count(json_decode($consulta->values->valor)) <= 100)
                                     {{--<i style="color: #f8bb86" class="app-menu__icon fa fa-exclamation-triangle fa-2x"></i>--}}
