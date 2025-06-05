@@ -156,6 +156,7 @@ class MostrarConsulta extends Component
 
         $titulo = $dados->titulo;
         $valores = json_decode($dados->valor, true);
+        $valores = array_slice($valores, 0, 100); // pega só 100 linhas
 
         // 2. Monta o prompt para a IA
         $prompt = "Você é um analista de dados do ERP Winthor. Abaixo estão os resultados da consulta \"$titulo\". Analise e forneça um resumo e insights úteis:\n\n";
