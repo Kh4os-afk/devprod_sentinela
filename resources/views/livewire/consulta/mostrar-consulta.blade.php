@@ -21,19 +21,19 @@
             <!-- Table for this submodule -->
             <flux:table class="table table-hover">
                 <flux:table.columns>
-                    <flux:table.column>Regra</flux:table.column>
-                    <flux:table.column class="text-center" align="center">Situação</flux:table.column>
-                    <flux:table.column class="text-center">Ocorrência</flux:table.column>
-                    <flux:table.column class="text-center">Data Atualização</flux:table.column>
-                    <flux:table.column class="text-center">Histórico</flux:table.column>
-                    <flux:table.column class="text-center">Operações</flux:table.column>
+                    <flux:table.column align="start" class="min-w-52">Regra</flux:table.column>
+                    <flux:table.column align="end">Situação</flux:table.column>
+                    <flux:table.column align="end">Ocorrência</flux:table.column>
+                    <flux:table.column align="end">Data Atualização</flux:table.column>
+                    <flux:table.column align="end">Histórico</flux:table.column>
+                    <flux:table.column align="end">Operações</flux:table.column>
                 </flux:table.columns>
 
                 <flux:table.rows>
                     @foreach($consultas as $consulta)
                         <flux:table.row>
-                            <flux:table.cell class="py-0!">{{ $consulta->titulo }}</flux:table.cell>
-                            <flux:table.cell class="py-0!">
+                            <flux:table.cell align="start" class="py-0! truncate max-w-52">{{ $consulta->titulo }}</flux:table.cell>
+                            <flux:table.cell align="end" class="py-0!">
                                 @if($consulta->values and count(json_decode($consulta->values->valor)) > 0 and count(json_decode($consulta->values->valor)) <= 100)
                                     {{--<i style="color: #f8bb86" class="app-menu__icon fa fa-exclamation-triangle fa-2x"></i>--}}
                                     <flux:icon.exclamation-triangle variant="solid" class="text-yellow-500"/>
@@ -45,20 +45,21 @@
                                     <flux:icon.check-circle variant="solid" class="text-green-500"/>
                                 @endif
                             </flux:table.cell>
-                            <flux:table.cell class="py-0! text-center">
+                            <flux:table.cell align="end" class="py-0!">
                                 {{ $consulta->values ? count(json_decode($consulta->values->valor)) : 0 }}
                             </flux:table.cell>
-                            <flux:table.cell class="py-0! text-center">
+                            <flux:table.cell align="end" class="py-0!">
                                 {{ $consulta->values ? $consulta->values->updated_at->format('d/m/Y H:i:s') : '' }}
                             </flux:table.cell>
-                            <flux:table.cell class="py-0! align-middle">
-                                <flux:chart :value="[15, 18, 16, 19, 22, 25, 28, 25, 29, 28, 32, 35,30,17,15,10,5,2,1]" class="w-[7rem] aspect-[4/1]">
+                            <flux:table.cell align="end" class="py-0!">
+                                {{--<flux:chart :value="[15, 18, 16, 19, 22, 25, 28, 25, 29, 28, 32, 35,30,17,15,10,5,2,1]" class="w-[7rem] aspect-[4/1]">
                                     <flux:chart.svg gutter="0">
                                         <flux:chart.line class="text-green-500 dark:text-green-400"/>
                                     </flux:chart.svg>
-                                </flux:chart>
+                                </flux:chart>--}}
+                                Em Produção
                             </flux:table.cell>
-                            <flux:table.cell class="py-0! text-center">
+                            <flux:table.cell align="end" class="py-0!">
                                 <div>
                                     <flux:button square variant="ghost" icon="document-text" wire:click="relatorio({{ $consulta->id }})"></flux:button>
                                     <flux:button square variant="ghost" :icon="$consulta->runningJob ? 'loading' : 'arrow-path'" wire:click="atualizar({{ $consulta->id }})"></flux:button>
