@@ -86,7 +86,7 @@
             </div>
             <div>
                 <flux:text class="text-base">
-                    {{ $respostaIA ?? 'Aguardando resposta...' }}
+                    {!! nl2br(e($respostaIA ?? 'Aguardando resposta...')) !!}
                 </flux:text>
             </div>
             <div class="flex">

@@ -168,7 +168,7 @@ class MostrarConsulta extends Component
         $apiKey = config('app.openai_api_key'); // defina isso no seu .env
 
         $postData = [
-            'model' => 'gpt-4',
+            'model' => 'gpt-3.5-turbo',
             'messages' => [
                 ['role' => 'system', 'content' => 'Você é um analista de dados experiente.'],
                 ['role' => 'user', 'content' => $prompt],
