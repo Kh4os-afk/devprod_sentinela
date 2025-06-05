@@ -159,10 +159,31 @@ class MostrarConsulta extends Component
         $valores = array_slice($valores, 0, 100); // pega só 100 linhas
 
         // 2. Monta o prompt para a IA
-        $prompt = "Você é um analista de dados do ERP Winthor. Abaixo estão os resultados da consulta \"$titulo\". Analise e forneça um resumo e insights úteis:\n\n";
+        $prompt = <<<PROMPT
+Você é um analista de dados especializado no ERP WinThor. Receberá abaixo o título e os resultados de uma consulta SQL criada por um DBA com o objetivo de identificar erros ou anomalias no sistema.
 
+Sua função é:
+1. Analisar os dados retornados.
+2. Identificar padrões, falhas ou valores fora do esperado.
+3. Sugerir possíveis causas ou ações que o usuário deve tomar.
+
+Responda no seguinte formato:
+- Resumo geral dos dados
+- Possíveis causas
+- Sugestões de ação
+- Grau de severidade (baixo/médio/alto)
+
+Título da consulta: "{$titulo}"
+
+Resultados:
+PROMPT;
+
+        $prompt .= "\n";
         foreach ($valores as $linha) {
-            $prompt .= "- " . implode(' | ', $linha) . "\n";
+            foreach ($linha as $chave => $valor) {
+                $prompt .= "$chave: $valor | ";
+            }
+            $prompt .= "\n";
         }
 
         // 3. Configura a requisição cURL para a OpenAI
