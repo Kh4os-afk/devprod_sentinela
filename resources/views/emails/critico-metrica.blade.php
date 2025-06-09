@@ -399,8 +399,8 @@
                                 $chartUrl = 'https://quickchart.io/chart?c=' . urlencode(json_encode($chartConfig));
                             @endphp
 
-                            {{--<img src="{{ $chartUrl }}" alt="Gráfico de evolução semanal"
-                                 style="max-width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 4px;">--}}
+                            <img src="{{ $chartUrl }}" alt="Gráfico de evolução semanal"
+                                 style="max-width: 100%; border: 1px solid #ddd; border-radius: 6px; padding: 4px;">
 
                             <br><br>
 
