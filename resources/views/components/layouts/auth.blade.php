@@ -8,11 +8,14 @@
     @vite('resources/css/app.css')
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="{{ asset('assets/animate_star.css') }}"/>
     @fluxAppearance
 </head>
 <body>
 {{ $slot }}
 @fluxScripts
+<script src="{{ asset('assets/typewriter.js') }}"></script>
 <flux:toast position="top right"/>
 </body>
 </html>
