@@ -90,7 +90,7 @@
                 </flux:text>
             </div>
             <div class="flex">
-                <flux:spacer />
+                <flux:spacer/>
                 <flux:button type="button" variant="ghost" x-on:click="$flux.modal('ia-resposta').close()">Fechar</flux:button>
             </div>
         </div>
@@ -129,8 +129,11 @@
                         @endforelse
                     </flux:select>
                 </div>
-                <div class="col-span-12">
+                <div class="col-span-10">
                     <flux:input wire:model="titulo_modal" label="Titulo"/>
+                </div>
+                <div class="col-span-2">
+                    <flux:input wire:model="qtde_critica" icon="exclamation-triangle" type="number" min="10" max="1000" mask="9999" label="Qtde Critica"/>
                 </div>
                 <div class="col-span-6">
                     <flux:select variant="listbox" searchable indicator="checkbox" multiple label="Tempo de Atualização" wire:model="horario_execucao">
@@ -164,7 +167,7 @@
                             </flux:select>
 
                             <flux:modal.trigger name="criar_submodulo">
-                                <flux:button icon="plus" {{--href="{{ route('criar.submodulo',['modulo' => $modulo_modal]) }}" target="_blank"--}}/>
+                                <flux:button icon="plus"/>
                             </flux:modal.trigger>
                         </flux:button.group>
 

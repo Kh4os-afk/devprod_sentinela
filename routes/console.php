@@ -44,3 +44,10 @@ Schedule::call(function () {
         ]);
     }
 })->dailyAt('22:00');
+
+// Disparar email critico para os usuarios por modulo
+Schedule::call(function () {
+    foreach (\App\Models\Module::get() as $module) {
+        (new \App\Services\DispararEmail())->emailCritico($module);
+    }
+})->dailyAt('12:00');

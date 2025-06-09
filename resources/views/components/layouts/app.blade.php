@@ -69,9 +69,7 @@
         </div>
 
         <flux:menu>
-            <flux:menu.radio.group>
-                <flux:menu.radio checked>{{ ucwords(mb_strtolower(Str::words(auth()->user()->name ?? 'Administrador',2,''))) }}</flux:menu.radio>
-            </flux:menu.radio.group>
+            <flux:menu.item icon="user-circle" href="/usuario">Meu Perfil</flux:menu.item>
 
             <flux:menu.separator/>
 
@@ -89,9 +87,7 @@
         <flux:profile avatar="https://fluxui.dev/img/demo/user.png"/>
 
         <flux:menu>
-            <flux:menu.radio.group>
-                <flux:menu.radio checked>{{ ucwords(mb_strtolower(Str::words(auth()->user()->name ?? 'Administrador',2,''))) }}</flux:menu.radio>
-            </flux:menu.radio.group>
+            <flux:menu.item icon="user-circle" href="/usuario">Meu Perfil</flux:menu.item>
 
             <flux:menu.separator/>
 
