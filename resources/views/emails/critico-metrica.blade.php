@@ -312,7 +312,9 @@
                                 <b>{{ $nome ?? 'Baratão da Carne' }}</b></p>
 
                             <p style="-webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; text-size-adjust: 100%; font-size: 14px; padding-bottom: 10px; margin: 0;">
-                                Atenção: As métricas abaixo do módulo <b>{{ $titulo ?? '' }}</b> atingiram valores superiores aos níveis críticos definidos e exigem <b>tratamento imediato</b>.
+                                Atenção: As métricas abaixo do módulo
+                                <b>{{ $titulo ?? '' }}</b> atingiram valores superiores aos níveis críticos definidos e exigem
+                                <b>tratamento imediato</b>.
                             </p>
 
                             <br>
@@ -336,6 +338,7 @@
                             <table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px; text-align: left;">
                                 <thead style="background-color: #f0f0f0; text-align: left;">
                                 <tr>
+                                    <th style="padding: 10px; border: 1px solid #ddd;">ID</th>
                                     <th style="padding: 10px; border: 1px solid #ddd;">Métrica</th>
                                     @foreach($dias as $dia)
                                         <th style="padding: 10px; border: 1px solid #ddd;">{{ \Carbon\Carbon::parse($dia)->format('d/m') }} (Ontem)</th>
@@ -346,6 +349,8 @@
                                 <tbody>
                                 @foreach($dados as $queryId => $diasValores)
                                     <tr>
+                                        <td style="padding: 10px; border: 1px solid #ddd;"><b>{{ $queryId ?? '' }}</b>
+                                        </td>
                                         <td style="padding: 10px; border: 1px solid #ddd;">{{ $diasValores->first()?->titulo ?? 'Sem título' }}</td>
                                         @foreach($dias as $dia)
                                             <td style="padding: 10px; border: 1px solid #ddd;">
@@ -361,7 +366,8 @@
                                                     {{ $totalHoje }}
                                                 @endif
                                             </td>
-                                            <td style="padding: 10px; border: 1px solid #ddd;"><b>{{ $diasValores[$dia]->qtde_critica }}</b></td>
+                                            <td style="padding: 10px; border: 1px solid #ddd;">
+                                                <b>{{ $diasValores[$dia]->qtde_critica }}</b></td>
                                         @endforeach
                                     </tr>
                                 @endforeach
@@ -371,13 +377,22 @@
                             <br>
 
                             @php
-                                $labels = $dias->map(fn($d) => \Carbon\Carbon::parse($d)->format('d/m'))->toArray();
+                                $diasGrafico = collect(range(6, 1))->map(fn($i) => now()->subDays($i)->format('Y-m-d'));
+                                $labels = $diasGrafico->map(fn($d) => \Carbon\Carbon::parse($d)->format('d/m'))->toArray();
+
+                                 $dadosGrafico = $valuesGrafico->groupBy(function($item) {
+                                    return $item->query_id;
+                                })->map(function($itens) {
+                                    return $itens->keyBy(function($item) {
+                                        return \Illuminate\Support\Carbon::parse($item->created_at)->format('Y-m-d');
+                                    });
+                                });
 
                                 // Gerar um dataset por query
-                                $datasets = collect($dados)->map(function ($diasValores, $queryId) use ($dias) {
+                                $datasets = collect($dadosGrafico)->map(function ($diasValores, $queryId) use ($diasGrafico) {
                                     return [
-                                        'label' => $diasValores->first()?->titulo ?? "Query {$queryId}",
-                                        'data' => $dias->map(fn($d) => $diasValores[$d]->total ?? 0),
+                                        'label' => /*$diasValores->first()?->titulo*/ $queryId ?? "Query {$queryId}",
+                                        'data' => $diasGrafico->map(fn($d) => $diasValores[$d]->total ?? 0),
                                         'fill' => false,
                                     ];
                                 })->values()->toArray();

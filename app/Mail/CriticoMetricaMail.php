@@ -14,14 +14,14 @@ class CriticoMetricaMail extends Mailable implements ShouldQueue
 {
     use Queueable;
 
-    public function __construct(Private String $titulo,Private $values)
+    public function __construct(private string $titulo, private $values, private $valuesGrafico)
     {
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('sentinela@devprod.com.br','Devprod Sentinela'),
+            from: new Address('sentinela@devprod.com.br', 'Devprod Sentinela'),
             subject: "Métricas Críticas - {$this->titulo}",
         );
     }
@@ -30,7 +30,7 @@ class CriticoMetricaMail extends Mailable implements ShouldQueue
     {
         return new Content(
             view: 'emails.critico-metrica',
-            with: ['titulo' => $this->titulo, 'values' => $this->values],
+            with: ['titulo' => $this->titulo, 'values' => $this->values, 'valuesGrafico' => $this->valuesGrafico],
         );
     }
 
