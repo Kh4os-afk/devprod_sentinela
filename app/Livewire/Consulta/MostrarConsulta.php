@@ -71,30 +71,38 @@ class MostrarConsulta extends Component
 
     public function editar()
     {
-        $this->idParaEditar->update([
-            'modulo' => $this->modulo_modal,
-            'titulo' => trim($this->titulo_modal),
-            'atualizacao' => $this->atualizacao_modal,
-            'consulta' => trim(str_ireplace(['@DBLSERVIDOR', ';', ' INSERT ', 'DATABASE', ' DELETE ', ' DROP ', ' UPDATE ', ' ALTER ', ' GRANT ', ' REVOKE ', ' COMMIT ', ' ROLLBACK ', ' SAVEPOINT ', ' TRUNCATE ', ' GRANT ROLE ', ' REVOKE ROLE ', ' MODIFY ', ' CHANGE '], '', $this->consulta_modal)),
-            'submodulo_id' => $this->submodulo,
-            'horarios_execucao' => $this->horario_execucao,
-            'qtde_critica' => $this->qtde_critica,
-        ]);
+        try {
+            $this->idParaEditar->update([
+                'modulo' => $this->modulo_modal,
+                'titulo' => trim($this->titulo_modal),
+                'atualizacao' => $this->atualizacao_modal,
+                'consulta' => trim(str_ireplace(['@DBLSERVIDOR', ';', ' INSERT ', 'DATABASE', ' DELETE ', ' DROP ', ' UPDATE ', ' ALTER ', ' GRANT ', ' REVOKE ', ' COMMIT ', ' ROLLBACK ', ' SAVEPOINT ', ' TRUNCATE ', ' GRANT ROLE ', ' REVOKE ROLE ', ' MODIFY ', ' CHANGE '], '', $this->consulta_modal)),
+                'submodulo_id' => $this->submodulo,
+                'horarios_execucao' => $this->horario_execucao,
+                'qtde_critica' => ($this->qtde_critica ?? null),
+            ]);
 
-        if ($this->consulta_modal !== $this->oldConsulta_modal) {
-            $value = Value::where('query_id', $this->idParaEditar->id)->first();
-            if ($value) {
-                $value->delete();
+            if ($this->consulta_modal !== $this->oldConsulta_modal) {
+                $value = Value::where('query_id', $this->idParaEditar->id)->first();
+                if ($value) {
+                    $value->delete();
+                }
             }
+
+            //$this->dispatch('consulta-editada', ['modulo' => $this->query->module->modulo ?? 'Sem Modulo Cadastrado']);
+
+            Flux::toast(
+                heading: 'Sucesso',
+                text: 'Consulta atualizada com sucesso.',
+                variant: 'success',
+            );
+        } catch (\Exception $e) {
+            Flux::toast(
+                heading: 'Erro',
+                text: $e->getMessage(),
+                variant: 'danger',
+            );
         }
-
-        //$this->dispatch('consulta-editada', ['modulo' => $this->query->module->modulo ?? 'Sem Modulo Cadastrado']);
-
-        Flux::toast(
-            heading: 'Sucesso',
-            text: 'Consulta atualizada com sucesso.',
-            variant: 'success',
-        );
 
         Flux::modal('editar-consulta')->close();
     }
