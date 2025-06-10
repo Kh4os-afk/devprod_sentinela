@@ -7,8 +7,8 @@ use App\Models\Module;
 use App\Models\Query;
 use App\Models\RunningJob;
 use App\Models\SubModulo;
+use App\Models\Value;
 use Flux\Flux;
-use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
@@ -24,6 +24,7 @@ class MostrarConsulta extends Component
     public $titulo_modal;
     public $atualizacao_modal;
     public $consulta_modal;
+    public $oldConsulta_modal;
     public ?int $qtde_critica;
     public $submodulo;
     public $modulo_id;
@@ -60,6 +61,7 @@ class MostrarConsulta extends Component
         $this->titulo_modal = $id->titulo;
         $this->atualizacao_modal = $id->atualizacao;
         $this->consulta_modal = $id->consulta;
+        $this->oldConsulta_modal = $id->consulta;
         $this->submodulo = $id->submodulo_id;
         $this->horario_execucao = json_decode($id->horarios_execucao);
         $this->qtde_critica = $id->qtde_critica;
@@ -71,13 +73,22 @@ class MostrarConsulta extends Component
     {
         $this->idParaEditar->update([
             'modulo' => $this->modulo_modal,
-            'titulo' => $this->titulo_modal,
+            'titulo' => trim($this->titulo_modal),
             'atualizacao' => $this->atualizacao_modal,
-            'consulta' => $this->consulta_modal,
+            'consulta' => trim(str_ireplace(['@DBLSERVIDOR', ';', ' INSERT ', 'DATABASE', ' DELETE ', ' DROP ', ' UPDATE ', ' ALTER ', ' GRANT ', ' REVOKE ', ' COMMIT ', ' ROLLBACK ', ' SAVEPOINT ', ' TRUNCATE ', ' GRANT ROLE ', ' REVOKE ROLE ', ' MODIFY ', ' CHANGE '], '', $this->consulta_modal)),
             'submodulo_id' => $this->submodulo,
             'horarios_execucao' => $this->horario_execucao,
             'qtde_critica' => $this->qtde_critica,
         ]);
+
+        if ($this->consulta_modal !== $this->oldConsulta_modal) {
+            $value = Value::where('query_id', $this->idParaEditar->id)->first();
+            if ($value) {
+                $value->delete();
+            }
+        }
+
+        //$this->dispatch('consulta-editada', ['modulo' => $this->query->module->modulo ?? 'Sem Modulo Cadastrado']);
 
         Flux::toast(
             heading: 'Sucesso',
