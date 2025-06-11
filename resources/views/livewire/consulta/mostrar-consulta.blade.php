@@ -133,7 +133,7 @@
                     <flux:input wire:model="titulo_modal" label="Titulo"/>
                 </div>
                 <div class="col-span-2">
-                    <flux:input wire:model="qtde_critica" icon="exclamation-triangle" type="number" min="10" max="1000" mask="9999" label="Qtde Critica"/>
+                    <flux:input wire:model="qtde_critica" icon="exclamation-triangle" type="number" min="0" mask="9999" label="Qtde Critica"/>
                 </div>
                 <div class="col-span-6">
                     <flux:select variant="listbox" searchable indicator="checkbox" multiple label="Tempo de Atualização" wire:model="horario_execucao">
@@ -172,7 +172,7 @@
                         </flux:button.group>
 
                         <flux:modal name="criar_submodulo" variant="flyout">
-                            <livewire:criar-sub-modulo :modulo="$modulo_modal"/>
+                            <livewire:criar-sub-modulo :modulo="$modulo_modal" wire:ignore.self/>
                         </flux:modal>
 
                         <flux:error name="submodulo"/>
