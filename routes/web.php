@@ -13,7 +13,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/logout', [\App\Livewire\Auth\Login::class, 'logout'])->name('logout');
 
     Route::get('/', \App\Livewire\Index::class);
-    Route::get('/sentinela/{modulo}', \App\Livewire\Consulta\MostrarConsulta::class)->name('estoque.index');
+    Route::get('/sentinela/{modulo}', \App\Livewire\Consulta\MostrarConsulta::class)->lazy()->name('estoque.index');
     Route::get('/relatorio/{tabela}', \App\Livewire\Relatorio::class)->lazy()->name('relatorio');
 
     Route::get('/usuario', \App\Livewire\EditarUsuario::class)->name('editar.usuario');
