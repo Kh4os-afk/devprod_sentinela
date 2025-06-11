@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Models\Module;
+use App\Models\Query;
 use App\Models\SubModulo;
 use Flux\Flux;
 use Livewire\Attributes\Rule;
@@ -40,6 +40,8 @@ class CriarSubModulo extends Component
     public function delete(SubModulo $id)
     {
         try {
+            Query::where('submodulo_id', $id->id)->update(['submodulo_id' => 0]);
+
             $id->delete();
 
             Flux::toast(
