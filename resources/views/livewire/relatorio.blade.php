@@ -1,27 +1,59 @@
-<flux:card>
-    <flux:heading size="xl" class="text-center">{{ $titulo ?? 'Relatório' }}</flux:heading>
-    <flux:subheading size="lg" class="text-center">{{ $data ? $data->format('d/m/Y H:i:s') : '' }}</flux:subheading>
-    <table id="table" class="display compact" style="width: 100%">
-        <thead>
-        <tr>
-            @forelse ($relatorios[0] ?? [] as $chave => $valor)
-                <th>{{ ucwords(str_replace('_',' ',$chave)) }}</th>
-            @empty
-                <th class="text-center">Sem Dados</th>
-            @endforelse
-        </tr>
-        </thead>
-        <tbody>
-        @forelse ($relatorios as $objeto)
+<div class="grid grid-cols-12 gap-4">
+    <flux:card class="col-span-12">
+        <flux:heading size="xl" class="text-center">{{ $titulo ?? 'Relatório' }}</flux:heading>
+        <flux:subheading size="lg" class="text-center">{{ $data ? $data->format('d/m/Y H:i:s') : '' }}</flux:subheading>
+        <table id="table" class="display compact" style="width: 100%">
+            <thead>
             <tr>
-                @forelse ($objeto as $valor)
-                    <td class="truncate">{{ $valor }}</td>
+                @forelse ($relatorios[0] ?? [] as $chave => $valor)
+                    <th>{{ ucwords(str_replace('_',' ',$chave)) }}</th>
                 @empty
+                    <th class="text-center">Sem Dados</th>
                 @endforelse
             </tr>
-    @empty
-    @endforelse
-</flux:card>
+            </thead>
+            <tbody>
+            @forelse ($relatorios as $objeto)
+                <tr>
+                    @forelse ($objeto as $valor)
+                        <td class="truncate">{{ $valor }}</td>
+                    @empty
+                    @endforelse
+                </tr>
+            @empty
+            @endforelse
+            </tbody>
+        </table>
+    </flux:card>
+    <flux:card class="col-span-12">
+        <flux:heading size="lg" class="tabular-nums">{{ $titulo ?? 'Relatório' }}</flux:heading>
+        <flux:text class="mb-4">Ocorrências nos últimos 30 dias</flux:text>
+
+        <flux:chart :value="$this->grafico1()" class="aspect-3/1">
+            <flux:chart.svg>
+                <flux:chart.line field="total" class="text-pink-500 dark:text-pink-400" />
+
+                <flux:chart.axis axis="x" field="created_at" :format="['month' => 'short', 'day' => 'numeric']">
+                    <flux:chart.axis.line />
+                    <flux:chart.axis.tick />
+                </flux:chart.axis>
+
+                <flux:chart.axis axis="y">
+                    <flux:chart.axis.grid />
+                    <flux:chart.axis.tick />
+                </flux:chart.axis>
+
+                <flux:chart.cursor />
+            </flux:chart.svg>
+
+            <flux:chart.tooltip>
+                <flux:chart.tooltip.heading field="created_at" :format="['year' => 'numeric', 'month' => 'numeric', 'day' => 'numeric']" />
+                <flux:chart.tooltip.value field="total" label="Ocorrencias" />
+            </flux:chart.tooltip>
+        </flux:chart>
+    </flux:card>
+</div>
+
 
 @assets
 <script src="{{ asset('datatables/datatables.min.js') }}"></script>
