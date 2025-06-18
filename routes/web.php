@@ -18,6 +18,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/usuario', \App\Livewire\EditarUsuario::class)->name('editar.usuario');
     Route::get('/criar', \App\Livewire\Consulta\CriarConsulta::class)->name('criar.consulta');
+
+    Route::get('/whatsapp', \App\Livewire\Whatsapp::class)->name('whatsapp');
 });
 
 Route::get('/teste/{modulo}', function ($modulo) {

@@ -1,20 +1,13 @@
 <div class="space-y-6">
     <div>
         <flux:heading size="xl" level="1">Sentinela</flux:heading>
-        <flux:subheading size="lg">Auditar {{ ucfirst(mb_strtolower($modulo->modulo)) }}</flux:subheading>
+        <flux:subheading size="lg">Metricas Whatsapp</flux:subheading>
     </div>
     <flux:separator variant="subtle"/>
 
-    @forelse($consultasAgrupadas as $submoduloId => $consultas)
-        <!-- Submodule Header -->
+    @forelse($consultasAgrupadas as $moduloNome => $consultas)
         <div class="mb-2">
-            <flux:heading size="lg">
-                @if($submoduloId === 'null')
-                    Sem Submódulo
-                @else
-                    {{ $submodulos->get($submoduloId)?->submodulo ?? 'Sem Submódulo' }}
-                @endif
-            </flux:heading>
+            <flux:heading size="lg">{{ $moduloNome }}</flux:heading>
         </div>
 
         <flux:card wire:poll.keep-alive.10s class="py-0">
@@ -62,7 +55,8 @@
                             <flux:table.cell align="end" class="py-0!">
                                 <div>
                                     <flux:button square variant="ghost" icon="document-text" wire:click="relatorio({{ $consulta->id }})"></flux:button>
-                                    <flux:button square variant="ghost" icon="bot" wire:click="iaResposta({{ $consulta->id }})"></flux:button>
+                                    <flux:button square variant="ghost" icon="paper-airplane" wire:click="enviarMensagem({{ $consulta->id }})"></flux:button>
+                                    {{--<flux:button square variant="ghost" icon="bot" wire:click="iaResposta({{ $consulta->id }})"></flux:button>--}}
                                     <flux:button square variant="ghost" :icon="$consulta->runningJob ? 'loading' : 'arrow-path'" wire:click="atualizar({{ $consulta->id }})"></flux:button>
                                     @if(auth()->user()->is_admin)
                                         <flux:button square variant="ghost" icon="pencil" wire:click="editarConsulta({{ $consulta->id }})"></flux:button>
@@ -129,21 +123,10 @@
                         @endforelse
                     </flux:select>
                 </div>
-                <div class="col-span-8">
+                <div class="col-span-5">
                     <flux:input wire:model="titulo_modal" label="Titulo"/>
                 </div>
-                <div class="col-span-2">
-                    <flux:input wire:model="qtde_critica" icon="exclamation-triangle" type="number" min="0" mask="9999" label="Qtde Critica"/>
-                </div>
-                <div class="col-span-2">
-                    <flux:fieldset>
-                        <flux:legend>Whatsapp</flux:legend>
-                        <div class="space-y-3">
-                            <flux:switch wire:model="whatsapp_modal" label="Métrica para envio de mensagem" align="left" />
-                        </div>
-                    </flux:fieldset>
-                </div>
-                <div class="col-span-6">
+                <div class="col-span-5">
                     <flux:select variant="listbox" searchable indicator="checkbox" multiple label="Tempo de Atualização" wire:model="horario_execucao">
                         @forelse(\App\Models\Horario::all() as $horario)
                             <flux:select.option>
@@ -162,29 +145,16 @@
                         @endforelse
                     </flux:select>
                 </div>
-                <div class="col-span-6">
-                    <flux:field>
-                        <flux:label>Sub Modulo</flux:label>
-
-                        <flux:button.group>
-                            <flux:select wire:model="submodulo">
-                                <flux:select.option value=0>Sem Modulo</flux:select.option>
-                                @foreach($this->submodulos as $submodulo)
-                                    <flux:select.option value="{{ $submodulo->id }}">{{ $submodulo->submodulo }}</flux:select.option>
-                                @endforeach
-                            </flux:select>
-
-                            <flux:modal.trigger name="criar_submodulo">
-                                <flux:button icon="plus"/>
-                            </flux:modal.trigger>
-                        </flux:button.group>
-
-                        <flux:modal name="criar_submodulo" variant="flyout">
-                            <livewire:criar-sub-modulo :modulo="$modulo_modal" wire:ignore.self/>
-                        </flux:modal>
-
-                        <flux:error name="submodulo"/>
-                    </flux:field>
+                <div class="col-span-2">
+                    <flux:fieldset>
+                        <flux:legend>Whatsapp</flux:legend>
+                        <div class="space-y-3">
+                            <flux:switch wire:model="whatsapp_modal" label="Métrica para envio de mensagem" align="left" />
+                        </div>
+                    </flux:fieldset>
+                </div>
+                <div class="col-span-12">
+                    <flux:textarea label="Whatsapp Prompt" placeholder="Whatsapp Prompt" rows="auto" wire:model="whatsapp_prompt_modal"/>
                 </div>
                 <div class="col-span-12">
                     <flux:textarea label="Consulta" placeholder="Consulta" rows="auto" wire:model="consulta_modal"/>

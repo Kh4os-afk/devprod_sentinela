@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Livewire\Consulta;
+namespace App\Livewire;
 
 use App\Jobs\AtualizacaoJob;
+use App\Jobs\WhatsappNotificacao;
 use App\Models\Module;
 use App\Models\Query;
 use App\Models\RunningJob;
@@ -13,7 +14,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 
-class MostrarConsulta extends Component
+class Whatsapp extends Component
 {
 
     public $modulo;
@@ -24,6 +25,7 @@ class MostrarConsulta extends Component
     public $titulo_modal;
     public $atualizacao_modal;
     public $whatsapp_modal;
+    public $whatsapp_prompt_modal;
     public $consulta_modal;
     public $oldConsulta_modal;
     public ?int $qtde_critica;
@@ -32,6 +34,35 @@ class MostrarConsulta extends Component
     public $horario_execucao;
     public $tituloIA;
     public $respostaIA;
+
+    public function enviarMensagem(Query $query)
+    {
+        if (!$query->values?->valor) {
+            Flux::toast(
+                heading: 'Erro',
+                text: 'Não há dados disponíveis para enviar via WhatsApp.',
+                variant: 'danger',
+            );
+
+            return;
+        }
+
+        try {
+            WhatsappNotificacao::dispatch($query);
+
+            Flux::toast(
+                heading: 'Sucesso',
+                text: 'Mensagem enviada com sucesso.',
+                variant: 'success',
+            );
+        } catch (\Exception $e) {
+            Flux::toast(
+                heading: 'Erro',
+                text: $e->getMessage(),
+                variant: 'danger',
+            );
+        }
+    }
 
     public function deletarConsulta(Query $id)
     {
@@ -61,8 +92,9 @@ class MostrarConsulta extends Component
         $this->modulo_modal = $id->modulo;
         $this->titulo_modal = $id->titulo;
         $this->atualizacao_modal = $id->atualizacao;
-        $this->whatsapp_modal = $id->whatsapp ? true : false;
         $this->consulta_modal = $id->consulta;
+        $this->whatsapp_modal = $id->whatsapp ? true : false;
+        $this->whatsapp_prompt_modal = $id->whatsapp_prompt;
         $this->oldConsulta_modal = $id->consulta;
         $this->submodulo = $id->submodulo_id;
         $this->horario_execucao = json_decode($id->horarios_execucao);
@@ -79,6 +111,7 @@ class MostrarConsulta extends Component
                 'titulo' => trim($this->titulo_modal),
                 'atualizacao' => $this->atualizacao_modal,
                 'whatsapp' => $this->whatsapp_modal,
+                'whatsapp_prompt' => $this->whatsapp_prompt_modal,
                 'consulta' => trim(str_ireplace(['@DBLSERVIDOR', ';', ' INSERT ', 'DATABASE', ' DELETE ', ' DROP ', ' UPDATE ', ' ALTER ', ' GRANT ', ' REVOKE ', ' COMMIT ', ' ROLLBACK ', ' SAVEPOINT ', ' TRUNCATE ', ' GRANT ROLE ', ' REVOKE ROLE ', ' MODIFY ', ' CHANGE '], '', $this->consulta_modal)),
                 'submodulo_id' => $this->submodulo,
                 'horarios_execucao' => $this->horario_execucao,
@@ -108,13 +141,6 @@ class MostrarConsulta extends Component
         }
 
         Flux::modal('editar-consulta')->close();
-    }
-
-    #[On('consulta-editada')]
-    public function mount($modulo)
-    {
-        $this->modulo = Module::where('modulo', $modulo)->firstOrFail();
-        $this->modulo_id = $this->modulo->id;
     }
 
     public function relatorio(Query $query)
@@ -251,17 +277,16 @@ PROMPT;
     public function render()
     {
         // Get all queries for this module
-        $queries = Query::where('modulo', $this->modulo->id)
-            ->where('whatsapp',false)
-            ->with('values')
-            ->orderBy('submodulo_id')
+        $queries = Query::where('whatsapp', true)
+            ->with(['values', 'module']) // carrega o relacionamento 'module'
+            ->orderBy('modulo')
             ->orderBy('titulo')
             ->get();
 
         // Group queries by submodule_id manually to avoid collection issues
         $grouped = [];
         foreach ($queries as $query) {
-            $key = $query->submodulo_id ?? 'null';
+            $key = $query->module->modulo ?? 'Sem Módulo';
             if (!isset($grouped[$key])) {
                 $grouped[$key] = collect();
             }
@@ -271,11 +296,12 @@ PROMPT;
         $this->consultasAgrupadas = collect($grouped);
 
         // Get submodules for display names
-        $submodulos = SubModulo::where('modulo_id', $this->modulo->id)->get()->keyBy('id');
+        $submodulos = SubModulo::get()->keyBy('id');
 
-        return view('livewire.consulta.mostrar-consulta', [
+        return view('livewire.whatsapp', [
             'consultasAgrupadas' => $this->consultasAgrupadas,
             'submodulos' => $submodulos
         ]);
     }
 }
+

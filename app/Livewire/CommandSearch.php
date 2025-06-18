@@ -21,6 +21,7 @@ class CommandSearch extends Component
     public function queries()
     {
         return Query::join('values', 'values.query_id', '=', 'queries.id')
+            ->where('whatsapp',false)
             ->select('queries.*')
             ->orderBy('queries.titulo','asc')
             ->get();

@@ -30,6 +30,7 @@
         @endforelse
 
         <flux:navlist.item icon="chevron-down" wire:navigate.hover href="{{ route('criar.consulta') }}">Criar Consulta</flux:navlist.item>
+        <flux:navlist.item icon="chat-bubble-oval-left-ellipsis" wire:navigate.hover href="/whatsapp">Whatsapp</flux:navlist.item>
         {{--<flux:navlist.item icon="chevron-double-down" wire:navigate.hover href="{{ route('criar.submodulo') }}">Cadastrar Sub Modulo</flux:navlist.item>--}}
 
 
@@ -44,7 +45,7 @@
 
     <flux:navlist variant="outline">
         <flux:navlist.item icon="cog-6-tooth" href="/configuracoes">Configurações</flux:navlist.item>
-        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>0.0.1</i></flux:navlist.item>
+        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>0.0.2</i></flux:navlist.item>
     </flux:navlist>
 
     <flux:dropdown position="top" align="start" class="max-lg:hidden">
