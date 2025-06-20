@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Query extends Model
 {
-    protected $fillable = ['modulo', 'tabela', 'titulo', 'atualizacao', 'consulta', 'submodulo_id','horarios_execucao','qtde_critica','whatsapp','whatsapp_prompt'];
+    protected $fillable = ['modulo', 'tabela', 'titulo', 'atualizacao', 'consulta', 'submodulo_id','horarios_execucao','qtde_critica','whatsapp','whatsapp_prompt','whatsapp_usuarios'];
 
     public function values()
     {

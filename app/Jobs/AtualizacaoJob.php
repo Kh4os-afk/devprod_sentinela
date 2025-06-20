@@ -19,9 +19,6 @@ class AtualizacaoJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $tries = 2; // Número de tentativas
-    public $timeout = 1200; // Timeout de 1200 segundos (20 minutos)
-
     protected $query;
     protected $startTime;
 
@@ -61,10 +58,14 @@ class AtualizacaoJob implements ShouldQueue
                     'tabela' => $this->query->tabela,
                     'valor' => $resultado,
                 ]);
+
+                WhatsappNotificacao::dispatch($this->query);
             } else {
                 $this->query->values()->update([
                     'valor' => $resultado,
                 ]);
+
+                WhatsappNotificacao::dispatch($this->query);
             }
 
             /*Calcula o tempo de execução da query */

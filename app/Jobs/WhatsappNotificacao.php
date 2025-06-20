@@ -35,6 +35,16 @@ class WhatsappNotificacao implements ShouldQueue
             return;
         }
 
+        $usuarios = json_decode($this->query->whatsapp_usuarios);
+
+        if (empty($usuarios)) {
+            Log::warning('Consulta sem usuários de WhatsApp configurados', [
+                'query_id' => $this->query->id,
+                'titulo' => $this->query->titulo,
+            ]);
+            return;
+        }
+
         // 1. Extrai os dados da consulta
         $valores = json_decode($this->query->values->valor, true);
         // 2. Pega as primeiras 100 linhas.
@@ -87,27 +97,43 @@ PROMPT;
         $respostaIA = $decoded['choices'][0]['message']['content'] ?? 'Não foi possível gerar uma resposta.';
 
         // 6. Envia via WhatsApp (WAHA)
-        $wahaResponse = Http::post('http://172.22.22.174:5600/api/sendText', [
-            'chatId' => '559292309115@c.us', // número do destinatário com DDI+DDD
-            'reply_to' => null,
-            'text' => $respostaIA,
-            'linkPreview' => true,
-            'linkPreviewHighQuality' => false,
-            'session' => 'default', // nome da sessão ativa no WAHA
-        ]);
+        foreach ($usuarios as $usuarioId) {
+            $user = \App\Models\User::find($usuarioId);
 
-        if ($wahaResponse->successful()) {
-            Log::info('Mensagem enviada via WAHA com sucesso', [
-                'query_id' => $this->query->id,
-                'titulo' => $this->query->titulo,
-                'resposta' => $respostaIA,
+            if (!$user || !$user->fone) {
+                Log::warning('Usuário inválido ou sem telefone', [
+                    'user_id' => $usuarioId,
+                ]);
+                continue;
+            }
+
+            // Limpa e formata o telefone com DDI (remove 9 extra após o DDD)
+            $numero = '55' . substr_replace(
+                    str_ireplace(['(', ')', ' ', '-'], '', $user->fone),
+                    '', 2, 1 // remove o 9 extra do número brasileiro
+                );
+
+            // Envia via WAHA
+            $wahaResponse = Http::post('http://172.22.22.174:5600/api/sendText', [
+                'chatId' => $numero . '@c.us',
+                'reply_to' => null,
+                'text' => $respostaIA,
+                'linkPreview' => false,
+                'linkPreviewHighQuality' => false,
+                'session' => 'default',
             ]);
-        } else {
-            Log::error('Erro ao enviar mensagem via WAHA', [
-                'query_id' => $this->query->id,
-                'titulo' => $this->query->titulo,
-                'erro' => $wahaResponse->body(),
-            ]);
+
+            if ($wahaResponse->successful()) {
+                Log::info('Mensagem enviada via WAHA', [
+                    'to' => $numero,
+                    'query_id' => $this->query->id,
+                ]);
+            } else {
+                Log::error('Erro ao enviar via WAHA', [
+                    'to' => $numero,
+                    'error' => $wahaResponse->body(),
+                ]);
+            }
         }
     }
 }

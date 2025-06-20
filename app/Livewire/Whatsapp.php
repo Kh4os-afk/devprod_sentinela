@@ -28,6 +28,7 @@ class Whatsapp extends Component
     public $whatsapp_prompt_modal;
     public $consulta_modal;
     public $oldConsulta_modal;
+    public $whatsapp_usuarios;
     public ?int $qtde_critica;
     public $submodulo;
     public $modulo_id;
@@ -95,9 +96,10 @@ class Whatsapp extends Component
         $this->consulta_modal = $id->consulta;
         $this->whatsapp_modal = $id->whatsapp ? true : false;
         $this->whatsapp_prompt_modal = $id->whatsapp_prompt;
+        $this->whatsapp_usuarios = json_decode($id->whatsapp_usuarios);
+        $this->horario_execucao = json_decode($id->horarios_execucao);
         $this->oldConsulta_modal = $id->consulta;
         $this->submodulo = $id->submodulo_id;
-        $this->horario_execucao = json_decode($id->horarios_execucao);
         $this->qtde_critica = $id->qtde_critica;
 
         Flux::modal('editar-consulta')->show();
@@ -114,6 +116,7 @@ class Whatsapp extends Component
                 'whatsapp_prompt' => $this->whatsapp_prompt_modal,
                 'consulta' => trim(str_ireplace(['@DBLSERVIDOR', ';', ' INSERT ', 'DATABASE', ' DELETE ', ' DROP ', ' UPDATE ', ' ALTER ', ' GRANT ', ' REVOKE ', ' COMMIT ', ' ROLLBACK ', ' SAVEPOINT ', ' TRUNCATE ', ' GRANT ROLE ', ' REVOKE ROLE ', ' MODIFY ', ' CHANGE '], '', $this->consulta_modal)),
                 'submodulo_id' => $this->submodulo,
+                'whatsapp_usuarios' => $this->whatsapp_usuarios,
                 'horarios_execucao' => $this->horario_execucao,
                 'qtde_critica' => ($this->qtde_critica ?? null),
             ]);

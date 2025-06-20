@@ -123,6 +123,25 @@
                         @endforelse
                     </flux:select>
                 </div>
+                <div class="col-span-12">
+                    <flux:select variant="listbox" searchable indicator="checkbox" multiple label="Usuários" wire:model="whatsapp_usuarios">
+                        @forelse(\App\Models\User::all() as $usuario)
+                            <flux:select.option value="{{ $usuario->id }}">
+                                <div class="flex items-center gap-2">
+                                    <flux:icon.user variant="mini" class="text-zinc-400"/>
+                                    {{ $usuario->name }}
+                                </div>
+                            </flux:select.option>
+                        @empty
+                            <flux:select.option value="00:00">
+                                <div class="flex items-center gap-2">
+                                    <flux:icon.x-circle variant="mini" class="text-zinc-400"/>
+                                    Sem Usuários Disponíveis
+                                </div>
+                            </flux:select.option>
+                        @endforelse
+                    </flux:select>
+                </div>
                 <div class="col-span-5">
                     <flux:input wire:model="titulo_modal" label="Titulo"/>
                 </div>
