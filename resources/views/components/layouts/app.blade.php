@@ -47,7 +47,7 @@
 
     <flux:navlist variant="outline">
         <flux:navlist.item icon="cog-6-tooth" href="/configuracoes">Configurações</flux:navlist.item>
-        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>0.0.5</i></flux:navlist.item>
+        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>0.0.6</i></flux:navlist.item>
     </flux:navlist>
 
     <flux:dropdown position="top" align="start" class="max-lg:hidden">
@@ -73,6 +73,9 @@
 
         <flux:menu>
             <flux:menu.item icon="user-circle" href="/usuario">Meu Perfil</flux:menu.item>
+            @if(auth()->user()->is_admin)
+                <flux:menu.item icon="user-plus" href="/registrar">Registrar</flux:menu.item>
+            @endif
 
             <flux:menu.separator/>
 
@@ -91,6 +94,9 @@
 
         <flux:menu>
             <flux:menu.item icon="user-circle" href="/usuario">Meu Perfil</flux:menu.item>
+            @if(auth()->user()->is_admin)
+                <flux:menu.item icon="user-plus" href="/registrar">Registrar</flux:menu.item>
+            @endif
 
             <flux:menu.separator/>
 
