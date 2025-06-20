@@ -171,23 +171,6 @@
                     }
                 }
             ],
-            columnDefs: [
-                {
-                    targets: '_all',
-                    render: function (data, type, row) {
-                        if (
-                            typeof data === 'string' &&
-                            /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2}:\d{2})?$/.test(data)
-                        ) {
-                            const date = new Date(data);
-                            if (!isNaN(date.getTime())) {
-                                return date.toLocaleString('pt-BR'); // Ex: 11/06/2025 14:30:00
-                            }
-                        }
-                        return data;
-                    }
-                }
-            ],
             /*Verifica se o campo da tabela possui R$ para formatalo como numero*/
             createdRow: function (row, data, dataIndex) {
                 $('td', row).each(function (index) {

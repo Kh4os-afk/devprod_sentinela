@@ -20,9 +20,9 @@ return [
         'dynamic' => [],
         'sessionVars' => [
             'NLS_TIME_FORMAT' => 'HH24:MI:SS',
-            'NLS_DATE_FORMAT' => 'YYYY-MM-DD HH24:MI:SS',
-            'NLS_TIMESTAMP_FORMAT' => 'YYYY-MM-DD HH24:MI:SS',
-            'NLS_TIMESTAMP_TZ_FORMAT' => 'YYYY-MM-DD HH24:MI:SS TZH:TZM',
+            'NLS_DATE_FORMAT' => 'DD/MM/YYYY',
+            'NLS_TIMESTAMP_FORMAT' => 'DD/MM/YYYY HH24:MI:SS',
+            'NLS_TIMESTAMP_TZ_FORMAT' => 'DD/MM/YYYY HH24:MI:SS TZH:TZM',
             'NLS_NUMERIC_CHARACTERS' => '.,',
         ],
     ],
