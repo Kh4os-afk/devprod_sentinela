@@ -7,7 +7,7 @@
 
     @forelse($consultasAgrupadas as $submoduloId => $consultas)
         <!-- Submodule Header -->
-        <div class="mb-2">
+        <div class="mb-2 animate__animated animate__fadeIn animate__delay-{{ $loop->index }}">
             <flux:heading size="lg">
                 @if($submoduloId === 'null')
                     Sem Submódulo
@@ -17,7 +17,7 @@
             </flux:heading>
         </div>
 
-        <flux:card wire:poll.keep-alive.10s class="py-0">
+        <flux:card wire:poll.keep-alive.10s class="py-0 animate__animated animate__fadeIn animate__delay-{{ $loop->index }}">
             <!-- Table for this submodule -->
             <flux:table class="table table-hover">
                 <flux:table.columns>

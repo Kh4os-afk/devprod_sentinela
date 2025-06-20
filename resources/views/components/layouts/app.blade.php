@@ -7,6 +7,8 @@
     <link rel="icon" href="{{ asset('imagens/logo_preta.png') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="{{ asset('assets/animate_star.css') }}"/>
     @vite('resources/css/app.css')
     @fluxAppearance
 </head>
@@ -45,7 +47,7 @@
 
     <flux:navlist variant="outline">
         <flux:navlist.item icon="cog-6-tooth" href="/configuracoes">Configurações</flux:navlist.item>
-        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>0.0.4</i></flux:navlist.item>
+        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>0.0.5</i></flux:navlist.item>
     </flux:navlist>
 
     <flux:dropdown position="top" align="start" class="max-lg:hidden">
