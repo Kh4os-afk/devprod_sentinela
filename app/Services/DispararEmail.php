@@ -30,17 +30,28 @@ class DispararEmail
 
         if ($values->isNotEmpty()) {
             $user_ids = \App\Models\UserModules::where('module_id', $module->id)
-                ->pluck('user_id')->unique();
+                ->where('responsavel', true)
+                ->pluck('user_id')
+                ->unique();
 
-            $users = \App\Models\User::whereIn('id', $user_ids)->pluck('email');
+            if ($user_ids) {
+                $users = \App\Models\User::whereIn('id', $user_ids)
+                    ->where('notificacao', true)
+                    ->pluck('email')
+                    ->toArray();
 
-            Mail::to($users)->queue(new CriticoMetricaMail($module->modulo, $values, $valuesGrafico));
+                Mail::to($users)->queue(new CriticoMetricaMail($module->modulo, $values, $valuesGrafico));
 
-            Log::info('DispararEmail: emailCritico metodo chamado', [
-                'Modulo' => $module,
-                'Usuarios' => $user_ids,
-                'Values' => $values,
-            ]);
+                Log::info('DispararEmail: emailCritico metodo chamado', [
+                    'Modulo' => $module,
+                    'Usuarios' => $user_ids,
+                    'Values' => $values,
+                ]);
+            } else {
+                Log::info('DispararEmail: emailCritico - Nenhum usuário encontrado para o módulo', [
+                    'Modulo' => $module,
+                ]);
+            }
         }
     }
 }

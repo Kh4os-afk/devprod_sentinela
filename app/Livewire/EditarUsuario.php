@@ -16,7 +16,9 @@ class EditarUsuario extends Component
 
     public $nome, $email, $fone;
     public $usuarioModulos;
+    public $usuarioPermissao;
     public $foto;
+    public $notificacao;
 
     public function salvar()
     {
@@ -49,14 +51,17 @@ class EditarUsuario extends Component
 
     public function salvarPreferencias()
     {
-
         try {
             UserModules::where('user_id', auth()->user()->id)
-                ->whereIn('id', $this->usuarioModulos)
+                ->whereIn('module_id', $this->usuarioModulos)
                 ->update(['responsavel' => true]);
             UserModules::where('user_id', auth()->user()->id)
-                ->whereNotIn('id', $this->usuarioModulos)
+                ->whereNotIn('module_id', $this->usuarioModulos)
                 ->update(['responsavel' => false]);
+
+            auth()->user()->update([
+                'notificacao' => $this->notificacao,
+            ]);
 
             Flux::toast(
                 heading: 'Sucesso',
@@ -77,10 +82,14 @@ class EditarUsuario extends Component
         $this->nome = auth()->user()->name;
         $this->email = auth()->user()->email;
         $this->fone = auth()->user()->fone;
+        $this->notificacao = auth()->user()->notificacao;
 
         $this->usuarioModulos = UserModules::where('user_id', auth()->user()->id)
             ->where('responsavel', true)
-            ->pluck('id');
+            ->pluck('module_id');
+
+        $this->usuarioPermissao = UserModules::where('user_id', auth()->user()->id)
+            ->pluck('module_id');
     }
 
     #[Computed]

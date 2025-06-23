@@ -1,7 +1,7 @@
 <div>
-    <flux:heading size="xl" level="1">Sentinela</flux:heading>
+    <flux:heading size="xl" level="1">Registro de Usuários</flux:heading>
 
-    <flux:subheading size="lg" class="mb-6">Monitore, audite e organize os processos da sua empresa com eficiência.</flux:subheading>
+    <flux:subheading size="lg">Cadastre novos usuários e gerencie suas permissões de acesso.</flux:subheading>
 
     <flux:separator variant="subtle"/>
 

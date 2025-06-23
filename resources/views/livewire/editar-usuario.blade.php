@@ -65,7 +65,7 @@
 
                 <flux:checkbox.group wire:model="usuarioModulos" class="flex gap-4 *:gap-x-2">
                     @forelse($this->modulos as $modulo)
-                        <flux:checkbox value="{{ $modulo->id }}" :label="$modulo->modulo"/>
+                        <flux:checkbox value="{{ $modulo->id }}" :label="$modulo->modulo" :disabled="!$usuarioPermissao->contains($modulo->id)"/>
                     @empty
                     @endforelse
                 </flux:checkbox.group>
@@ -73,10 +73,9 @@
 
             <flux:separator variant="subtle" class="my-8"/>
 
-            <flux:radio.group label="Notifique-me sobre..." class="max-sm:flex-col">
-                <flux:radio value="all" label="Todas as novas mensagens" checked/>
-                <flux:radio value="direct" label="Mensagens diretas e menções"/>
-                <flux:radio value="none" label="Nada"/>
+            <flux:radio.group label="Notifique-me sobre..." class="max-sm:flex-col" wire:model="notificacao">
+                <flux:radio value="1" label="Todas as novas mensagens"/>
+                <flux:radio value="0" label="Nada"/>
             </flux:radio.group>
 
             <div class="flex justify-end">
@@ -87,7 +86,7 @@
 
     <flux:separator variant="subtle" class="my-8"/>
 
-    <div class="flex flex-col lg:flex-row gap-4 lg:gap-6 pb-10">
+    {{--<div class="flex flex-col lg:flex-row gap-4 lg:gap-6 pb-10">
         <div class="w-80">
             <flux:heading size="lg">Notificações por email</flux:heading>
             <flux:subheading>Escolha quais emails você gostaria de receber de nós.</flux:subheading>
@@ -110,5 +109,5 @@
                 <flux:switch label="Emails de segurança" description="Receba emails sobre a atividade e segurança da sua conta."/>
             </flux:fieldset>
         </div>
-    </div>
+    </div>--}}
 </div>
