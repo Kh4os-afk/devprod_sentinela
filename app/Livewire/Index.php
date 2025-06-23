@@ -8,6 +8,13 @@ use Livewire\Component;
 
 class Index extends Component
 {
+    public array $data = [
+        ['date' => '2025-06-23', 'visitors' => 267],
+        ['date' => '2025-06-22', 'visitors' => 259],
+        ['date' => '2025-06-21', 'visitors' => 269],
+        // ...
+    ];
+    
     public function render()
     {
         /*$i = 8;
