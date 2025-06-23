@@ -6,7 +6,7 @@
     <flux:separator variant="subtle"/>
 
     <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-5 mt-8 space-y-8">
+        <div class="col-span-6 mt-8 space-y-8">
             <flux:callout icon="shield-check" color="blue" inline>
                 <flux:callout.heading>Atualize suas informações</flux:callout.heading>
 
@@ -15,7 +15,10 @@
                 </flux:callout.text>
 
                 <x-slot name="actions" class="@md:h-full m-0!">
-                    <flux:button href="/usuario">Atualizar agora</flux:button>
+                    <flux:button href="/usuario" class="animate__animated animate__headShake animate__infinite animate__slower animate__delay-5s">
+                        <flux:icon.bell class="size-4 text-black!"></flux:icon.bell>
+                        Atualizar agora
+                    </flux:button>
                 </x-slot>
             </flux:callout>
 
@@ -83,11 +86,11 @@
                 </flux:chart>
             </flux:card>--}}
         </div>
-        <div class="col-span-7 flex mt-8">
-            <img src="{{ asset('imagens/devprod_white.svg') }}" class="block dark:hidden">
+        <div class="col-span-6 flex mt-4">
+            <img src="{{ asset('imagens/devprod_white.svg') }}" class="block dark:hidden animate__animated animate__backInRight">
 
             <!-- Tema escuro -->
-            <img src="{{ asset('imagens/devprod_black.svg') }}" class="hidden dark:block">
+            <img src="{{ asset('imagens/devprod_black.svg') }}" class="hidden dark:block animate__animated animate__backInRight">
         </div>
     </div>
 </div>

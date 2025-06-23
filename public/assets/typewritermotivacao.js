@@ -1,7 +1,7 @@
 const quoteElement = document.getElementById("typedtext");
 const authorElement = document.getElementById("typedauthor");
 
-let iSpeed = 40;
+let iSpeed = 30;
 let quoteText = "";
 let authorText = "";
 let quotePos = 0;
