@@ -16,7 +16,7 @@
 
                 <x-slot name="actions" class="@md:h-full m-0!">
                     <flux:button href="/usuario" class="animate__animated animate__headShake animate__infinite animate__slower animate__delay-5s">
-                        <flux:icon.bell class="size-4 text-black!"></flux:icon.bell>
+                        <flux:icon.bell class="size-4 text-black! dark:text-white!"></flux:icon.bell>
                         Atualizar agora
                     </flux:button>
                 </x-slot>
