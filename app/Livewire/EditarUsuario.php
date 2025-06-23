@@ -8,20 +8,26 @@ use App\Models\UserModules;
 use Flux\Flux;
 use Livewire\Component;
 use Livewire\Attributes\Computed;
-use PhpParser\Node\Scalar\String_;
+use Livewire\WithFileUploads;
 
 class EditarUsuario extends Component
 {
+    use WithFileUploads;
+
     public $nome, $email, $fone;
     public $usuarioModulos;
+    public $foto;
 
     public function salvar()
     {
         try {
+            $foto = $this->foto->store('fotos','public');
+
             auth()->user()->update([
                 'name' => $this->nome,
                 'email' => $this->email,
                 'fone' => $this->fone,
+                'foto' => $foto,
             ]);
 
             Flux::toast(
@@ -67,6 +73,7 @@ class EditarUsuario extends Component
         $this->nome = auth()->user()->name;
         $this->email = auth()->user()->email;
         $this->fone = auth()->user()->fone;
+        $this->foto = auth()->user()->foto;
 
         $this->usuarioModulos = UserModules::where('user_id', auth()->user()->id)
             ->where('responsavel', true)

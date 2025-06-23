@@ -10,12 +10,23 @@
         </div>
 
         <form wire:submit="salvar" class="flex-1 space-y-6">
-            <flux:input
-                    wire:model="nome"
-                    label="Nome de usuário"
-                    description="Este é seu nome público. Pode ser seu nome real ou um pseudônimo. Você só pode alterá-lo a cada 30 dias."
-                    placeholder="Francisco"
-            />
+                <flux:fieldset class="grid grid-cols-12 gap-4">
+                    <div class="col-span-8">
+                        <flux:input
+                                wire:model="nome"
+                                label="Nome de usuário"
+                                placeholder="Francisco"
+                        />
+                    </div>
+
+                    <div class="col-span-4">
+                        <flux:input
+                                wire:model="foto"
+                                label="Foto de usuário"
+                                type="file"
+                        />
+                    </div>
+                </flux:fieldset>
 
             <flux:input
                     wire:model="email"

@@ -47,12 +47,12 @@
 
     <flux:navlist variant="outline">
         <flux:navlist.item icon="cog-6-tooth" href="/configuracoes">Configurações</flux:navlist.item>
-        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>0.0.9</i></flux:navlist.item>
+        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>1.0.0</i></flux:navlist.item>
     </flux:navlist>
 
     <flux:dropdown position="top" align="start" class="max-lg:hidden">
         <div class="flex space-x-1">
-            <flux:profile avatar="https://fluxui.dev/img/demo/user.png" name="{{ ucwords(mb_strtolower(Str::words(auth()->user()->name ?? 'Administrador',2,''))) }}"/>
+            <flux:profile icon="user" avatar="{{ !empty(auth()->user()->foto) ? asset('storage/' . auth()->user()->foto) : 'https://fluxui.dev/img/demo/user.png' }}" name="{{ ucwords(mb_strtolower(Str::words(auth()->user()->name ?? 'Administrador',2,''))) }}"/>
 
             <flux:separator vertical variant="subtle" class="my-2"/>
             <flux:dropdown x-data align="end">
@@ -90,7 +90,7 @@
     <flux:spacer/>
 
     <flux:dropdown position="top" alignt="start">
-        <flux:profile avatar="https://fluxui.dev/img/demo/user.png"/>
+        <flux:profile avatar="{{ !empty(auth()->user()->foto) ? asset('storage/' . auth()->user()->foto) : 'https://fluxui.dev/img/demo/user.png' }}"/>
 
         <flux:menu>
             <flux:menu.item icon="user-circle" href="/usuario">Meu Perfil</flux:menu.item>
