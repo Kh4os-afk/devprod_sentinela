@@ -21,14 +21,17 @@ class EditarUsuario extends Component
     public function salvar()
     {
         try {
-            $foto = $this->foto->store('fotos','public');
-
-            auth()->user()->update([
+            $data = [
                 'name' => $this->nome,
                 'email' => $this->email,
                 'fone' => $this->fone,
-                'foto' => $foto,
-            ]);
+            ];
+
+            if ($this->foto) {
+                $data['foto'] = $this->foto->store('fotos', 'public');
+            }
+
+            auth()->user()->update($data);
 
             Flux::toast(
                 heading: 'Sucesso',
@@ -43,6 +46,7 @@ class EditarUsuario extends Component
             );
         }
     }
+
     public function salvarPreferencias()
     {
 
@@ -73,7 +77,6 @@ class EditarUsuario extends Component
         $this->nome = auth()->user()->name;
         $this->email = auth()->user()->email;
         $this->fone = auth()->user()->fone;
-        $this->foto = auth()->user()->foto;
 
         $this->usuarioModulos = UserModules::where('user_id', auth()->user()->id)
             ->where('responsavel', true)
