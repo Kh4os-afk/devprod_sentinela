@@ -1,4 +1,4 @@
-<div>
+<div class="space-y-6">
     <flux:heading size="xl" level="1">Registro de Usuários</flux:heading>
 
     <flux:subheading size="lg">Cadastre novos usuários e gerencie suas permissões de acesso.</flux:subheading>
@@ -6,21 +6,34 @@
     <flux:separator variant="subtle"/>
 
     <div class="grid grid-cols-12 gap-4">
-        <div class="col-span-6 mt-8 space-y-8">
-            <flux:callout icon="shield-check" color="blue" inline>
-                <flux:callout.heading>Atualize suas informações</flux:callout.heading>
+        <div class="col-span-6 mr-8 space-y-4">
+            <flux:callout icon="chat-bubble-oval-left-ellipsis" color="green" inline>
+                <flux:callout.heading>Novidade: Envio automático via WhatsApp</flux:callout.heading>
 
                 <flux:callout.text>
-                    Mantenha seu cadastro sempre atualizado. Verifique se seus dados estão corretos, como e-mail, telefone e foto de perfil.
+                    Agora o sistema conta com uma nova funcionalidade que permite o envio automático de mensagens via WhatsApp. Programe alertas e notificações para serem enviados diretamente aos usuários de forma prática e eficiente.
                 </flux:callout.text>
 
                 <x-slot name="actions" class="@md:h-full m-0!">
-                    <flux:button href="/usuario" class="animate__animated animate__headShake animate__infinite animate__slower animate__delay-5s">
-                        <flux:icon.bell class="size-4 text-black! dark:text-white!"></flux:icon.bell>
-                        Atualizar agora
-                    </flux:button>
                 </x-slot>
             </flux:callout>
+
+            @if(!auth()->user()->email || !auth()->user()->fone || !auth()->user()->foto)
+                <flux:callout icon="shield-check" color="blue" inline>
+                    <flux:callout.heading>Atualize suas informações</flux:callout.heading>
+
+                    <flux:callout.text>
+                        Mantenha seu cadastro sempre atualizado. Verifique se seus dados estão corretos, como e-mail, telefone e foto de perfil.
+                    </flux:callout.text>
+
+                    <x-slot name="actions" class="@md:h-full m-0!">
+                        <flux:button href="/usuario" class="animate__animated animate__headShake animate__infinite animate__slower animate__delay-5s">
+                            <flux:icon.bell class="size-4 text-black! dark:text-white!"></flux:icon.bell>
+                            Atualizar agora
+                        </flux:button>
+                    </x-slot>
+                </flux:callout>
+            @endif
 
             <flux:card>
                 <flux:heading size="lg" class="mb-2">Me Motive!</flux:heading>
@@ -59,34 +72,9 @@
                     </flux:accordion.item>
                 </flux:accordion>
             </flux:card>
-
-            {{--<flux:card class="hidden 2xl:block">
-                <flux:heading level="1" size="lg" class="pb-4">Acessos Diarios</flux:heading>
-                <flux:chart wire:model="data" class="aspect-3/1">
-                    <flux:chart.svg>
-                        <flux:chart.line field="visitors" class="text-pink-500 dark:text-pink-400" />
-
-                        <flux:chart.axis axis="x" field="date">
-                            <flux:chart.axis.line />
-                            <flux:chart.axis.tick />
-                        </flux:chart.axis>
-
-                        <flux:chart.axis axis="y">
-                            <flux:chart.axis.grid />
-                            <flux:chart.axis.tick />
-                        </flux:chart.axis>
-
-                        <flux:chart.cursor />
-                    </flux:chart.svg>
-
-                    <flux:chart.tooltip>
-                        <flux:chart.tooltip.heading field="date" :format="['year' => 'numeric', 'month' => 'numeric', 'day' => 'numeric']" />
-                        <flux:chart.tooltip.value field="visitors" label="Visitors" />
-                    </flux:chart.tooltip>
-                </flux:chart>
-            </flux:card>--}}
         </div>
-        <div class="col-span-6 flex mt-4">
+
+        <div class="col-span-6 mt-8">
             <img src="{{ asset('imagens/devprod_white.svg') }}" class="block dark:hidden animate__animated animate__backInRight">
 
             <!-- Tema escuro -->
