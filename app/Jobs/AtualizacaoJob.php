@@ -59,13 +59,13 @@ class AtualizacaoJob implements ShouldQueue
                     'valor' => $resultado,
                 ]);
 
-                WhatsappNotificacao::dispatch($this->query);
+                WhatsappNotificacaoJob::dispatch($this->query);
             } else {
                 $this->query->values()->update([
                     'valor' => $resultado,
                 ]);
 
-                WhatsappNotificacao::dispatch($this->query);
+                WhatsappNotificacaoJob::dispatch($this->query);
             }
 
             /*Calcula o tempo de execução da query */

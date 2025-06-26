@@ -47,7 +47,7 @@
 
     <flux:navlist variant="outline">
         <flux:navlist.item icon="cog-6-tooth" href="/configuracoes">Configurações</flux:navlist.item>
-        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>1.0.5</i></flux:navlist.item>
+        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>1.0.6</i></flux:navlist.item>
     </flux:navlist>
 
     <flux:dropdown position="top" align="start" class="max-lg:hidden">

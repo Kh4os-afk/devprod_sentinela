@@ -9,21 +9,15 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
-class WhatsappNotificacao implements ShouldQueue
+class WhatsappNotificacaoJob implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(public Query $query)
     {
         //
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
         if (!$this->query->values?->valor) {
@@ -42,82 +36,81 @@ class WhatsappNotificacao implements ShouldQueue
                 'query_id' => $this->query->id,
                 'titulo' => $this->query->titulo,
             ]);
+
             return;
         }
 
-        // 1. Extrai os dados da consulta
+        // Extrai e limita os dados
         $valores = json_decode($this->query->values->valor, true);
-        // 2. Pega as primeiras 100 linhas.
-        $valores = array_slice($valores, 0, 100); // limita a 100 linhas
-        // 3. Verifica o Prompt
-        $prompt = $this->query->whatsapp_prompt;
+        $valores = array_slice($valores, 0, 100);
 
-        // 3. Monta o prompt para a IA
-        $prompt .= "\n";
-        $prompt .= <<<PROMPT
-Título da consulta: "{$this->query->titulo}"
+        // Prompt do developer
+        $developerPrompt = $this->query->whatsapp_prompt ?? 'Gere um resumo breve e direto com base nos dados da consulta abaixo.';
 
-Resultados:
-PROMPT;
+        // Prompt do usuário
+        $userPrompt = "Título da consulta: \"{$this->query->titulo}\"\n\nResultados:\n";
 
         foreach ($valores as $linha) {
             foreach ($linha as $chave => $valor) {
-                $prompt .= "$chave: $valor | ";
+                $userPrompt .= "$chave: $valor | ";
             }
-            $prompt .= "\n";
+            $userPrompt .= "\n";
         }
 
-        // 5. Envia para OpenAI
-        $apiKey = config('app.openai_api_key');
-
-        $postData = [
-            'model' => 'gpt-3.5-turbo',
-            'messages' => [
-                ['role' => 'user', 'content' => $prompt],
+        $chatgpt = Http::withHeaders([
+            "Content-Type" => "application/json",
+            "Authorization" => "Bearer " . config('app.openai_api_key'),
+        ])->post('https://api.openai.com/v1/responses', [
+            "model" => "gpt-3.5-turbo",
+            "instructions" => "Você é um assistente de IA especializado em gerar mensagens curtas e educadas para envio via WhatsApp. Sempre conclua sua resposta com a frase: 'Atenciosamente, Baratinho Bot.'. Responda com objetividade, mantendo um tom cordial e profissional.",
+            "input" => [
+                [
+                    "role" => "developer",
+                    "content" => $developerPrompt
+                ],
+                [
+                    "role" => "user",
+                    "content" => $userPrompt
+                ]
             ],
-        ];
-
-        $ch = curl_init();
-
-        curl_setopt_array($ch, [
-            CURLOPT_URL => 'https://api.openai.com/v1/chat/completions',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . $apiKey,
-                'Content-Type: application/json',
-            ],
-            CURLOPT_POSTFIELDS => json_encode($postData),
         ]);
 
-        $response = curl_exec($ch);
-        curl_close($ch);
+        if ($chatgpt->successful()) {
+            $response = json_decode($chatgpt->body(), true);
 
-        $decoded = json_decode($response, true);
-        $respostaIA = $decoded['choices'][0]['message']['content'] ?? 'Não foi possível gerar uma resposta.';
+            $text = $response['output'][0]['content'][0]['text'] ?? 'Não foi possível gerar uma resposta.';
 
-        // 6. Envia via WhatsApp (WAHA)
+            Log::info('Resposta do ChatGPT', [
+                'status' => $chatgpt->status(),
+                'text' => $text,
+            ]);
+        } else {
+            Log::error('Erro ao chamar a API do ChatGPT', [
+                'status' => $chatgpt->status(),
+                'body' => $chatgpt->body(),
+            ]);
+
+            return;
+        }
+
+        // Envia via WhatsApp
         foreach ($usuarios as $usuarioId) {
             $user = \App\Models\User::find($usuarioId);
 
             if (!$user || !$user->fone) {
-                Log::warning('Usuário inválido ou sem telefone', [
-                    'user_id' => $usuarioId,
-                ]);
+                Log::warning('Usuário inválido ou sem telefone', ['user_id' => $usuarioId]);
                 continue;
             }
 
-            // Limpa e formata o telefone com DDI (remove 9 extra após o DDD)
             $numero = '55' . substr_replace(
                     str_ireplace(['(', ')', ' ', '-'], '', $user->fone),
-                    '', 2, 1 // remove o 9 extra do número brasileiro
+                    '', 2, 1
                 );
 
-            // Envia via WAHA
             $wahaResponse = Http::post('http://172.22.22.174:5600/api/sendText', [
                 'chatId' => $numero . '@c.us',
                 'reply_to' => null,
-                'text' => $respostaIA,
+                'text' => $text,
                 'linkPreview' => false,
                 'linkPreviewHighQuality' => false,
                 'session' => 'default',
@@ -125,12 +118,12 @@ PROMPT;
 
             if ($wahaResponse->successful()) {
                 Log::info('Mensagem enviada via WAHA', [
-                    'to' => $numero,
+                    'numero' => $numero,
                     'query_id' => $this->query->id,
                 ]);
             } else {
                 Log::error('Erro ao enviar via WAHA', [
-                    'to' => $numero,
+                    'numero' => $numero,
                     'error' => $wahaResponse->body(),
                 ]);
             }

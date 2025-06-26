@@ -3,7 +3,7 @@
 namespace App\Livewire;
 
 use App\Jobs\AtualizacaoJob;
-use App\Jobs\WhatsappNotificacao;
+use App\Jobs\WhatsappNotificacaoJob;
 use App\Models\Module;
 use App\Models\Query;
 use App\Models\RunningJob;
@@ -49,7 +49,7 @@ class Whatsapp extends Component
         }
 
         try {
-            WhatsappNotificacao::dispatch($query);
+            WhatsappNotificacaoJob::dispatch($query);
 
             Flux::toast(
                 heading: 'Sucesso',
