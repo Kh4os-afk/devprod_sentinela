@@ -3,7 +3,10 @@
         <!-- Spinner girando ao redor -->
         <div class="absolute inset-0 rounded-full border-4 border-t-transparent animate-spin opacity-75"></div>
 
-        <!-- Sua imagem no centro -->
-        <img src="{{ asset('imagens/branco.png') }}" class="w-24 opacity-75">
+        <!-- Tema claro -->
+        <img src="{{ asset('imagens/preto.png') }}" class="w-24 opacity-75 block dark:hidden">
+
+        <!-- Tema escuro -->
+        <img src="{{ asset('imagens/branco.png') }}" class="w-24 opacity-75 hidden dark:block">
     </div>
 </div>
