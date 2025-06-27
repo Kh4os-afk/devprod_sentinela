@@ -20,7 +20,7 @@ class WhatsappNotificacaoJob implements ShouldQueue
 
     public function handle(): void
     {
-        if (!$this->query->values?->valor) {
+        if (!$this->query->values?->valor || empty(json_decode($this->query->values?->valor))) {
             Log::error('Tentativa de enviar notificação via WhatsApp sem dados disponíveis', [
                 'query_id' => $this->query->id,
                 'titulo' => $this->query->titulo,
@@ -62,7 +62,7 @@ class WhatsappNotificacaoJob implements ShouldQueue
             "Authorization" => "Bearer " . config('app.openai_api_key'),
         ])->post('https://api.openai.com/v1/responses', [
             "model" => "gpt-3.5-turbo",
-            "instructions" => "Você é um assistente de IA especializado em gerar mensagens curtas e educadas para envio via WhatsApp. Sempre conclua sua resposta com a frase: 'Atenciosamente, Baratinho Bot.'. Responda com objetividade, mantendo um tom cordial e profissional.",
+            "instructions" => "Você é um assistente de IA especializado em gerar mensagens curtas e educadas que serão enviadas via WhatsApp. Sempre conclua sua resposta dando um espaço na mensagem e colocando a frase: 'Atenciosamente, Baratinho Bot.'. Responda com objetividade, mantendo um tom cordial e profissional.",
             "input" => [
                 [
                     "role" => "developer",
