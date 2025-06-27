@@ -13,7 +13,7 @@
     @fluxAppearance
 </head>
 <body class="min-h-screen bg-white dark:bg-zinc-800">
-<flux:sidebar sticky stashable class="bg-zinc-50 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-700">
+<flux:sidebar sticky stashable class="bg-zinc-50 dark:bg-zinc-900 border-r rtl:border-r-0 rtl:border-l border-zinc-200 dark:border-zinc-700">
     <flux:sidebar.toggle class="lg:hidden" icon="x-mark"/>
 
     <flux:brand href="/" logo="{{ asset('imagens/logo_preta.png') }}" name="{{ config('app.name','Devprod Sentinela') }}" class="px-2 dark:hidden"/>
@@ -47,7 +47,7 @@
 
     <flux:navlist variant="outline">
         <flux:navlist.item icon="cog-6-tooth" href="/configuracoes">Configurações</flux:navlist.item>
-        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>1.0.6</i></flux:navlist.item>
+        <flux:navlist.item icon="information-circle" href="#">Ajuda / <i>1.0.7</i></flux:navlist.item>
     </flux:navlist>
 
     <flux:dropdown position="top" align="start" class="max-lg:hidden">

@@ -60,7 +60,7 @@
             </div>
 
             <div class="flex gap-4 animate__animated animate__fadeInUp">
-                <flux:avatar src="{{ asset('imagens/logo_branco.png') }}" class="size-12"/>
+                <flux:avatar circle src="{{ asset('imagens/logo_branco.png') }}" class="size-12 bg-transparent!" />
 
                 <div class="flex flex-col justify-center font-medium">
                     <div class="text-lg">Devprod Solutions</div>
